@@ -38,7 +38,7 @@ public abstract class AbstractCollection<E> implements Collection<E>, Serializab
 		StringBuilder builder = new StringBuilder("[");
 		for (E element : this) {
 			builder.append(element == this ? "(this collection)" : element);
-			if (++index != size) {
+			if (++index < size) {
 				builder.append(", ");
 			}
 		}
