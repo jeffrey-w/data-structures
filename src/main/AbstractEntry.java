@@ -1,5 +1,8 @@
 package main;
 
+import static util.Common.areEqual;
+import static util.Common.hash;
+
 /**
  * The {@code AbstractEntry} class is the base class from which all {@code Map} nodes shall be derived.
  *
@@ -50,4 +53,28 @@ abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements
 		return result;
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		if(!(obj instanceof AbstractEntry)) {
+			return false;
+		}
+		AbstractEntry<?, ?> entry = (AbstractEntry<?, ?>) obj;
+		return areEqual(key, entry.key) && areEqual(value, entry.value);
+	}
+
+	@Override
+	public int hashCode() {
+		int prime = 31, result = 1;
+		result = prime * result + hash(key);
+		result = prime * result + hash(value);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + (key == owner ? "(this map)" : key) + " : " + (value == owner ? "(this map)" : value) + "}";
+	}
 }
