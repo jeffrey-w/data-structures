@@ -3,7 +3,7 @@ package main;
 /**
  * The {@code AbstractPosition} class is the base class from which all {@code Collection} nodes shall be derived.
  *
- * @param <E> the type of element carried by this {@code AbstractPosition}
+ * @param <E> the type of element at this {@code AbstractPosition}
  * @author Jeff Wilgus
  */
 abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implements Position<E> {
@@ -11,7 +11,7 @@ abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implem
 	private E element;
 
 	/**
-	 * Constructs a new {@code AbstractPosition} that carries the specified {@code element} and belongs to the
+	 * Constructs a new {@code AbstractPosition} object that carries the specified {@code element} and belongs to the
 	 * specified {@code Collection}.
 	 *
 	 * @param element the specified {@code element}
@@ -20,7 +20,7 @@ abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implem
 	 */
 	AbstractPosition(final E element, final Collection<E> owner) {
 		super(owner);
-		setElement(element);
+		this.element = element;
 	}
 
 	@Override
