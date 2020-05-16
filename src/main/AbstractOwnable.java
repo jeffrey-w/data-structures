@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 abstract class AbstractOwnable<E> {
 
-	private E owner;
+	E owner;
 
 	/**
 	 * Constructs a new AbstractOwnable that belongs to the specified {@code owner}.
