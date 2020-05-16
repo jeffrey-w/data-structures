@@ -1,5 +1,7 @@
 package main;
 
+import java.util.NoSuchElementException;
+
 /**
  * The {@code Map} interface specifies operations on a collection of key-value pairs.
  *
@@ -15,11 +17,12 @@ public interface Map<K, V> {
 	void clear();
 
 	/**
-	 * Determines whether or not there exists a mapping between a value and the specified {@code key} in this {@code
+	 * Determines whether or not there is an association between the specified {@code key} and a value in this {@code
 	 * Map}.
 	 *
 	 * @param key the specified key
-	 * @return {@code true} if a mapping exists between the specified {@code key} and a value in this {@code Map}
+	 * @return {@code true} if there exists an association between the specified {@code key} and a value in this {@code
+	 * Map}
 	 */
 	boolean contains(K key);
 
@@ -47,32 +50,33 @@ public interface Map<K, V> {
 	V put(K key, V value);
 
 	/**
-	 * Deletes an entry from this {@code Map} associating some value with the specified {@code key} if such an entry
-	 * exists.
+	 * Deletes an entry from this {@code Map} associating some value with the specified {@code key}.
 	 *
 	 * @param key the specified key
-	 * @return the value associated with the specified {@code key}, or, exceptionally, {@code null} if either no such
-	 * mapping exists or if that was the value associated with the specified {@code key}
+	 * @return the value associated with the specified {@code key}
+	 * @throws IllegalStateException if this {@code Map} is empty
+	 * @throws NoSuchElementException if there is no mapping between the specified {@code key} and a value in this
+	 * {@code Map}
 	 */
 	V remove(K key);
 
 	/**
-	 * Provides a value in this {@code Map} associated with the specified {@code key} if such an entry exists.
+	 * Retrieves the value in this {@code Map} associated with the specified {@code key}.
 	 *
 	 * @param key the specified key
-	 * @return the value associated with the specified {@code key}, or, exceptionally, {@code null} if either no such
-	 * mapping exists or if that was the value associated with the specified {@code key}
+	 * @throws IllegalStateException if this {@code Map} is empty
+	 * @throws NoSuchElementException if there is no mapping between the specified {@code key} and a value in this
+	 * {@code Map}
 	 */
 	V get(K key);
 
 	/**
-	 * Replaces the {@code value} associated with the specified {@code key} with that specified if such an entry
-	 * exists.
+	 * Replaces the {@code value} associated with the specified {@code key} with that specified if another value is
 	 *
 	 * @param key the specified key
 	 * @param value the specified value
-	 * @return the value associated with the specified {@code key}, or, exceptionally, {@code null} if either no such
-	 * mapping exists or if that was the value associated with the specified {@code key}
+	 * @return the value associated with the specified {@code key}, or {@code null} if no entry in this {@code Map}
+	 * associates the specified {@code key} with a value
 	 */
 	V replace(K key, V value);
 
