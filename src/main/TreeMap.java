@@ -70,10 +70,6 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	@Override
 	public V put(final K key, final V value) {
-		return insert(key, value);
-	}
-
-	private V insert(K key, V value) {
 		Node<K, V> z = new Node<>(key, value, this);
 		Node<K, V> y = nil, x = root;
 		K cmp;
