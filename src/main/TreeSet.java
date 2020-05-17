@@ -4,7 +4,8 @@ import java.util.Comparator;
 
 /**
  * The {@code TreeSet} class is a red-black tree implementation of the {@code Set} interface. Elements are sorted on the
- * order induced by a supplied {@code Comparator}, or their natural ordering if none is supplied. Elements may be {@code
+ * order induced by a supplied {@code Comparator}, or their natural ordering if none is supplied. This class offers
+ * logarithmic time performance for {@code add}, {@code get}, and {@code remove} operations. Elements may be {@code
  * null}.
  *
  * @param <E> the type of element in this {@code TreeSet}
@@ -26,11 +27,6 @@ public class TreeSet<E> extends AbstractSet<E> implements OrderedSet<E> {
 	 */
 	public TreeSet(Comparator<E> comp) {
 		map = new TreeMap<>(comp);
-	}
-
-	@Override
-	void init() {
-		map().init();
 	}
 
 	@Override
