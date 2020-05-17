@@ -1,6 +1,7 @@
 package main;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 /**
  * The {@code AbstractMap} class is the base class from which all {@code Map} implementations shall be derived.
@@ -72,6 +73,48 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 			}
 		}
 		return builder.append("]").toString();
+	}
+
+	transient Set<K> keys;
+	transient Collection<V> values;
+
+	@Override
+	public Set<K> keySet() {
+		Set<K> keys = this.keys;
+		if(keys == null) {
+			keys = new AbstractSet<>() {
+				@Override
+				void init() {
+					AbstractMap.this.init();
+				}
+
+				@Override
+				public Iterator<K> iterator() {
+					return new Iterator<>() {
+						private final Iterator<Entry<K, V>> i = entrySet().iterator();
+
+						@Override
+						public boolean hasNext() {
+							return i.hasNext();
+						}
+
+						@Override
+						public K next() {
+							return i.next().getKey();
+						}
+
+						@Override
+						public void remove() {
+							i.remove();
+						}
+					};
+				}
+
+				private static final long serialVersionUID = 6034320417510056542L;
+			};
+			this.keys = keys;
+		}
+		return keys;
 	}
 
 	private static final long serialVersionUID = -1517329747185431297L;
