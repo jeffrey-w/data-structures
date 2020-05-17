@@ -150,23 +150,31 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	}
 
 	@Override
-	public V removeFirst() {
-		return delete(minimum(root));
+	public Entry<K, V> removeFirst() {
+		Node<K, V> first = minimum(root);
+		delete(first);
+		return first;
 	}
 
 	@Override
-	public V removeLast() {
-		return delete(maximum(root));
+	public Entry<K, V> removeLast() {
+		Node<K, V> last = maximum(root);
+		delete(last);
+		return last;
 	}
 
 	@Override
-	public V removePrevious(final K key) {
-		return delete(predecessor(search(root, key)));
+	public Entry<K, V> removePrevious(final K key) {
+		Node<K, V> previous = predecessor(search(root, key));
+		delete(predecessor(previous));
+		return previous;
 	}
 
 	@Override
-	public V removeNext(final K key) {
-		return delete(successor(search(root, key)));
+	public Entry<K, V> removeNext(final K key) {
+		Node<K, V> next = successor(search(root, key));
+		delete(next);
+		return next;
 	}
 
 	V delete(Node<K, V> z) {
@@ -310,34 +318,34 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	@Override
 	public V get(final K key) {
-		return valueOf(search(root, key));
+		return validateNode(search(root, key)).getValue();
 	}
 
 	@Override
-	public V getFirst() {
-		return valueOf(minimum(root));
+	public Entry<K, V> getFirst() {
+		return validateNode(minimum(root));
 	}
 
 	@Override
-	public V getLast() {
-		return valueOf(maximum(root));
+	public Entry<K, V> getLast() {
+		return validateNode(maximum(root));
 	}
 
 	@Override
-	public V getPrevious(final K key) {
-		return valueOf(predecessor(search(root, key)));
+	public Entry<K, V> getPrevious(final K key) {
+		return validateNode(predecessor(search(root, key)));
 	}
 
 	@Override
-	public V getNext(final K key) {
-		return valueOf(successor(search(root, key)));
+	public Entry<K, V> getNext(final K key) {
+		return validateNode(successor(search(root, key)));
 	}
 
-	private V valueOf(Node<K, V> node) {
+	private Entry<K, V> validateNode(Node<K, V> node) {
 		if (isEmpty()) {
 			throw new IllegalStateException();
 		}
-		return node.getValue();
+		return node;
 	}
 
 	private Node<K, V> search(Node<K, V> root, K key) {
@@ -412,5 +420,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	}
 
 	private static final long serialVersionUID = -2526600353447364806L;
+
+	// TODO read/write object
 
 }
