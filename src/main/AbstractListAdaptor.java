@@ -50,4 +50,6 @@ public abstract class AbstractListAdaptor<E> implements Collection<E>, Serializa
 
 	private static final long serialVersionUID = -5616829587411714697L;
 
+	// TODO read/write object
+
 }
