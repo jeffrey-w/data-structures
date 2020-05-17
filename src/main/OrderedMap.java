@@ -13,76 +13,81 @@ import java.util.NoSuchElementException;
 public interface OrderedMap<K, V> extends Map<K, V> {
 
 	/**
-	 * Removes the first entry in this {@code OrderedMap}.
+	 * Removes the first {@code Entry} in this {@code OrderedMap}.
 	 *
-	 * @return the removed value
+	 * @return the removed {@code Entry}
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
 	 */
-	V removeFirst();
+	Entry<K, V> removeFirst();
 
 	/**
-	 * Removes the last entry in this {@code OrderedMap}.
+	 * Removes the last {@code Entry} in this {@code OrderedMap}.
 	 *
-	 * @return the removed value
+	 * @return the removed {@code Entry}
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
 	 */
-	V removeLast();
+	Entry<K, V> removeLast();
 
 	/**
-	 * Removes the entry in this {@code OrderedMap} with the {@code key} immediately preceding that specified.
-	 *
-	 * @param key the specified key
-	 * @return the removed value
-	 * @throws IllegalStateException if this {@code OrderedMap} is empty
-	 * @throws NoSuchElementException if there is no entry in this {@code OrderedMap} with the specified {@code key}
-	 */
-	V removePrevious(K key);
-
-	/**
-	 * Removes the entry in this {@code OrderedMap} with the {@code key} immediately after that specified.
+	 * Removes the {@code Entry} in this {@code OrderedMap} with the {@code key} immediately preceding that specified.
 	 *
 	 * @param key the specified key
-	 * @return the removed value
+	 * @return the removed {@code Entry}
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
-	 * @throws NoSuchElementException if there is no entry in this {@code OrderedMap} with the specified {@code key}
+	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
+	 * key}
 	 */
-	V removeNext(K key);
+	Entry<K, V> removePrevious(K key);
 
 	/**
-	 * Retrieves the first value in this {@code OrderedMap}.
+	 * Removes the {@code Entry} in this {@code OrderedMap} with the {@code key} immediately after that specified.
 	 *
-	 * @return the first value in this {@code OrderedMap}
+	 * @param key the specified key
+	 * @return the removed {@code Entry}
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
+	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
+	 * key}
 	 */
-	V getFirst();
+	Entry<K, V> removeNext(K key);
 
 	/**
-	 * Retrieves the last value in this {@code OrderedMap}.
+	 * Retrieves the first {@code Entry} in this {@code OrderedMap}.
 	 *
-	 * @return the last value in this {@code OrderedMap}
+	 * @return the first {@code Entry} in this {@code OrderedMap}
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
 	 */
-	V getLast();
+	Entry<K, V> getFirst();
 
 	/**
-	 * Retrieves the value in this {@code OrderedMap} associated with the {@code key} immediately preceding that
+	 * Retrieves the last {@code Entry} in this {@code OrderedMap}.
+	 *
+	 * @return the last {@code Entry} in this {@code OrderedMap}
+	 * @throws IllegalStateException if this {@code OrderedMap} is empty
+	 */
+	Entry<K, V> getLast();
+
+	/**
+	 * Retrieves the {@code Entry} in this {@code OrderedMap} associated with the {@code key} immediately preceding
+	 * that specified.
+	 *
+	 * @param key the specified key
+	 * @return the {@code Entry} associated with the {@code key} before the specified one
+	 * @throws IllegalStateException if this {@code OrderedMap} is empty
+	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
+	 * key}
+	 */
+	Entry<K, V> getPrevious(K key);
+
+	/**
+	 * Retrieves the {@code Entry} in this {@code OrderedMap} associated with the {@code key} immediately after that
 	 * specified.
 	 *
 	 * @param key the specified key
-	 * @return the value associated with the {@code key} before the specified one
+	 * @return the {@code Entry} associated with the {@code key} after the specified one
 	 * @throws IllegalStateException if this {@code OrderedMap} is empty
-	 * @throws NoSuchElementException if there is no entry in this {@code OrderedMap} with the specified {@code key}
+	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
+	 * key}
 	 */
-	V getPrevious(K key);
-
-	/**
-	 * Retrieves the value in this {@code OrderedMap} associated with the {@code key} immediately after that specified.
-	 *
-	 * @param key the specified key
-	 * @return the value associated with the {@code key} after the specified one
-	 * @throws IllegalStateException if this {@code OrderedMap} is empty
-	 * @throws NoSuchElementException if there is no entry in this {@code OrderedMap} with the specified {@code key}
-	 */
-	V getNext(K key);
+	Entry<K, V> getNext(K key);
 
 }
