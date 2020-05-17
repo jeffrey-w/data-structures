@@ -1,5 +1,7 @@
 package util;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * The {@code Common} class exposes a number of constants and methods that are useful for the implementation of a
  * several data structures.
@@ -12,6 +14,11 @@ public class Common {
 	 * The default size allocation for array-backed data structures.
 	 */
 	public static final int DEFAULT_CAPACITY = 8;
+
+	/**
+	 * A common source of randomness.
+	 */
+	public static final ThreadLocalRandom RAND = ThreadLocalRandom.current();
 
 	/**
 	 * Determines whether or not the specified elements have equal values.
