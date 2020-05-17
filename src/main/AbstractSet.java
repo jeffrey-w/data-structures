@@ -1,7 +1,15 @@
 package main;
 
+import java.util.Iterator;
+
 import static util.Common.hash;
 
+/**
+ * The {@code AbstractSet} class is the base class from which all {@code Set} implementations shall be derived.
+ *
+ * @param <E> the type of element in this {@code AbstractSet}
+ * @author Jeff Wilgus
+ */
 public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
 
 	Map<E, Void> map;
@@ -17,11 +25,6 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	}
 
 	@Override
-	public int size() {
-		return map.size();
-	}
-
-	@Override
 	public boolean isEmpty() {
 		return map.isEmpty();
 	}
@@ -29,11 +32,18 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	@Override
 	public void add(final E element) {
 		map.put(element, null);
+		size = map.size();
 	}
 
 	@Override
 	public void remove(final E element) {
 		map.remove(element);
+		size = map.size();
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return map.keySet().iterator();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -55,7 +65,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 				return false;
 			}
 		}
-		return size() == set.size();
+		return size == set.size;
 	}
 
 	@Override
@@ -68,5 +78,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	}
 
 	private static final long serialVersionUID = -3360434002937380937L;
+
+	// TODO read/write object
 
 }
