@@ -20,6 +20,11 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	}
 
 	@Override
+	void init() {
+		((AbstractMap<E, Void>) map).init();
+	}
+
+	@Override
 	public boolean contains(final E element) {
 		return map.contains(element);
 	}
@@ -71,7 +76,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	@Override
 	public int hashCode() {
 		int result = 0;
-		for(E element : this) {
+		for (E element : this) {
 			result += hash(element);
 		}
 		return result;
