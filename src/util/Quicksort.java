@@ -3,6 +3,8 @@ package util;
 import java.util.Comparator;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static util.Common.RAND;
+
 /**
  * A randomized implementation of {@code Quicksort}. This algorithm sorts a given array on the order induced by a
  * supplied {@code Comparator} or, if that is {@code null}, the natural ordering of the elements in the array.
@@ -11,8 +13,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Jeff Wilgus
  */
 public final class Quicksort<E> {
-
-	private static final ThreadLocalRandom RAND = ThreadLocalRandom.current();
 
 	private final Comparator<E> comp;
 
