@@ -81,17 +81,33 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 	@Override
 	public Set<K> keySet() {
 		Set<K> keys = this.keys;
-		if(keys == null) {
-			keys = new AbstractSet<>() {
+		if (keys == null) {
+			keys = new MinSet<>() {
+
 				@Override
-				void init() {
-					AbstractMap.this.init();
+				public void clear() {
+					AbstractMap.this.clear();
+				}
+
+				@Override
+				public boolean contains(final K key) {
+					return AbstractMap.this.contains(key);
+				}
+
+				@Override
+				public int size() {
+					return size;
+				}
+
+				@Override
+				public boolean isEmpty() {
+					return AbstractMap.this.isEmpty();
 				}
 
 				@Override
 				public Iterator<K> iterator() {
 					return new Iterator<>() {
-						private final Iterator<Entry<K, V>> i = entrySet().iterator();
+						final Iterator<Entry<K, V>> i = entrySet().iterator();
 
 						@Override
 						public boolean hasNext() {
@@ -107,14 +123,88 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 						public void remove() {
 							i.remove();
 						}
+
 					};
 				}
 
-				private static final long serialVersionUID = 6034320417510056542L;
 			};
 			this.keys = keys;
 		}
 		return keys;
+	}
+
+	@Override
+	public Collection<V> values() {
+		Collection<V> values = this.values;
+		if (values == null) {
+			values = new Collection<>() {
+
+				@Override
+				public void clear() {
+					AbstractMap.this.clear();
+				}
+
+				@Override
+				public boolean contains(final V value) {
+					for (K key : keySet()) {
+						if (get(key).equals(value)) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				@Override
+				public int size() {
+					return size;
+				}
+
+				@Override
+				public boolean isEmpty() {
+					return AbstractMap.this.isEmpty();
+				}
+
+				@Override
+				public Iterator<V> iterator() {
+					return new Iterator<>() {
+						final Iterator<Entry<K, V>> i = entrySet().iterator();
+
+						@Override
+						public boolean hasNext() {
+							return i.hasNext();
+						}
+
+						@Override
+						public V next() {
+							return i.next().getValue();
+						}
+
+						@Override
+						public void remove() {
+							i.remove();
+						}
+
+					};
+				}
+
+			};
+			this.values = values;
+		}
+		return values;
+	}
+
+	static abstract class MinSet<E> implements Set<E> {
+
+		@Override
+		public void add(final E element) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void remove(final E element) {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 	private static final long serialVersionUID = -1517329747185431297L;
