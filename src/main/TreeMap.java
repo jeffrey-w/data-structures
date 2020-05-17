@@ -8,6 +8,15 @@ import java.util.Objects;
 
 import static util.Common.areEqual;
 
+/**
+ * The {@code TreeMap} class is a red-black tree implementation of the {@code Map} interface. Entries are sorted by key
+ * on the order induced by a supplied {@code Comparator}, or natural ordering if none is supplied. Both keys and values
+ * may be {@code null}, however, only one key may be.
+ *
+ * @param <K> the type of key that maps to values
+ * @param <V> the type of mapped values
+ * @author Jeff Wilgus
+ */
 public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V> {
 
 	private static final class Node<K, V> extends AbstractEntry<K, V> {
@@ -38,10 +47,18 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	private transient Node<K, V> root;
 	private Comparator<K> comp;
 
+	/**
+	 * Constructs a new {@code TreeMap} object.
+	 */
 	public TreeMap() {
 		this(new DefaultComparator<>());
 	}
 
+	/**
+	 * Constructs a new {@code TreeMap} object sorted on the order induced by the specified {@code Comparator}.
+	 *
+	 * @param comp the specified {@code Comparator}
+	 */
 	public TreeMap(Comparator<K> comp) {
 		init();
 		setComp(comp);
