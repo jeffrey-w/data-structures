@@ -3,6 +3,7 @@ package main;
 import util.DefaultComparator;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -10,8 +11,9 @@ import static util.Common.areEqual;
 
 /**
  * The {@code TreeMap} class is a red-black tree implementation of the {@code Map} interface. Entries are sorted by key
- * on the order induced by a supplied {@code Comparator}, or natural ordering if none is supplied. Both keys and values
- * may be {@code null}, however, only one key may be.
+ * on the order induced by a supplied {@code Comparator}, or natural ordering if none is supplied. This class offers
+ * logarithmic time performance for {@code put}, {@code get}, and {@code remove} operations. Both keys and values may be
+ * {@code null}, however, only one key may be.
  *
  * @param <K> the type of key that maps to values
  * @param <V> the type of mapped values
@@ -58,6 +60,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	 * Constructs a new {@code TreeMap} object sorted on the order induced by the specified {@code Comparator}.
 	 *
 	 * @param comp the specified {@code Comparator}
+	 * @throws NullPointerException if the specified {@code Comparator} is {@code null}
 	 */
 	public TreeMap(Comparator<K> comp) {
 		init();
@@ -93,10 +96,10 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 		while (x != nil) {
 			y = x;
 			cmp = x.getKey();
-			if (areEqual(cmp, key)) {
+			if (areEqual(key, cmp)) {
 				return y.setValue(value);
 			}
-			if (lessThan(cmp, key)) {
+			if (lessThan(key, cmp)) {
 				x = x.left;
 			} else {
 				x = x.right;
@@ -107,7 +110,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 			root = z;
 		} else {
 			cmp = y.getKey();
-			if (lessThan(cmp, key)) {
+			if (lessThan(key, cmp)) {
 				y.left = z;
 			} else {
 				y.right = z;
@@ -421,19 +424,80 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 		return y;
 	}
 
-	@Override
-	public Set<K> keySet() {
-		return null;
-	}
-
-	@Override
-	public Collection<V> values() {
-		return null;
-	}
+	private transient Set<Entry<K, V>> entries;
 
 	@Override
 	public Set<Entry<K, V>> entrySet() {
-		return null;
+		Set<Entry<K, V>> entries = this.entries;
+		if (entries == null) {
+			entries = new MinSet<>() {
+
+				@Override
+				public void clear() {
+					TreeMap.this.clear();
+				}
+
+				@Override
+				public boolean contains(final Entry<K, V> entry) {
+					if (TreeMap.this.contains(entry.getKey())) {
+						return areEqual(get(entry.getKey()), entry.getValue());
+					}
+					return false;
+				}
+
+				@Override
+				public int size() {
+					return size;
+				}
+
+				@Override
+				public boolean isEmpty() {
+					return TreeMap.this.isEmpty();
+				}
+
+				@Override
+				public Iterator<Entry<K, V>> iterator() {
+					return new Iterator<>() {
+						Node<K, V> current = root, last;
+						final Stack<Node<K, V>> s = new LinkedStack<>();
+						boolean removable = false;
+
+						@Override
+						public boolean hasNext() {
+							return !(current == nil && s.isEmpty());
+						}
+
+						@Override
+						public Entry<K, V> next() {
+							if (!hasNext()) {
+								throw new NoSuchElementException();
+							}
+							while (current != nil) {
+								s.push(current);
+								current = current.left;
+							}
+							last = s.pop();
+							current = last.right;
+							removable = true;
+							return last;
+						}
+
+						@Override
+						public void remove() {
+							if (!removable) {
+								throw new IllegalStateException();
+							}
+							removable = false;
+							delete(last);
+						}
+
+					};
+				}
+
+			};
+			this.entries = entries;
+		}
+		return entries;
 	}
 
 	private static final long serialVersionUID = -2526600353447364806L;
