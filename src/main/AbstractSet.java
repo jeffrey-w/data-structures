@@ -16,7 +16,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 
 	@Override
 	public void clear() {
-		map.clear();
+		init();
 	}
 
 	@Override
