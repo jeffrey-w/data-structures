@@ -20,9 +20,9 @@ class TreeMapTest {
 
 	private static final int SIZE = 10_000;
 	private static final TestObject PRESENT = TestObject.random();
-	private static TreeMap<TestObject, Object> PREV;
+	private static TreeMap<TestObject, TestObject> PREV;
 
-	private static boolean isSorted(TreeMap<TestObject, Object> map) {
+	private static boolean isSorted(TreeMap<TestObject, TestObject> map) {
 		TestObject last = null;
 		for (TestObject key : map.keySet()) {
 			if (last != null && last.compareTo(key) > 0) {
@@ -33,11 +33,11 @@ class TreeMapTest {
 		return true;
 	}
 
-	private static int treeHeight(TreeMap<TestObject, Object> map) {
+	private static int treeHeight(TreeMap<TestObject, TestObject> map) {
 		return heightOf(getNodeOf(map, "root"), getNodeOf(map, "nil"));
 	}
 
-	private static int heightOf(Entry<TestObject, Object> entry, Entry<TestObject, Object> nil) {
+	private static int heightOf(Entry<TestObject, TestObject> entry, Entry<TestObject, TestObject> nil) {
 		if (entry == nil) {
 			return 0;
 		}
@@ -45,11 +45,11 @@ class TreeMapTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Entry<TestObject, Object> getNodeOf(TreeMap<TestObject, Object> map, String field) {
+	private static Entry<TestObject, TestObject> getNodeOf(TreeMap<TestObject, TestObject> map, String field) {
 		try {
 			Field node = TreeMap.class.getDeclaredField(field);
 			node.setAccessible(true);
-			return (Entry<TestObject, Object>) node.get(map);
+			return (Entry<TestObject, TestObject>) node.get(map);
 		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
@@ -57,13 +57,13 @@ class TreeMapTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Entry<TestObject, Object> getChildOf(Entry<TestObject, Object> entry, String field) {
+	private static Entry<TestObject, TestObject> getChildOf(Entry<TestObject, TestObject> entry, String field) {
 		Class<?>[] classes = TreeMap.class.getDeclaredClasses();
 		for (Class<?> cls : classes) {
 			try {
 				Field childNode = cls.getDeclaredField(field);
 				childNode.setAccessible(true);
-				return (Entry<TestObject, Object>) childNode.get(entry);
+				return (Entry<TestObject, TestObject>) childNode.get(entry);
 			} catch (IllegalAccessException | NoSuchFieldException e) {
 				e.printStackTrace();
 			}
@@ -71,11 +71,11 @@ class TreeMapTest {
 		throw new AssertionError();
 	}
 
-	private static int expectedHeight(TreeMap<TestObject, Object> map) {
+	private static int expectedHeight(TreeMap<TestObject, TestObject> map) {
 		return (int) ((Math.log10(map.size() + 1) / Math.log10(2)) * 2);
 	}
 
-	private static void halve(TreeMap<TestObject, Object> map) {
+	private static void halve(TreeMap<TestObject, TestObject> map) {
 		int half = map.size() >> 1;
 		for (int i = 0; i < half; i++) {
 			if (RAND.nextBoolean()) {
@@ -86,11 +86,11 @@ class TreeMapTest {
 		}
 	}
 
-	private static void removeRoot(TreeMap<TestObject, Object> map) {
+	private static void removeRoot(TreeMap<TestObject, TestObject> map) {
 		map.remove(getNodeOf(map, "root").getKey());
 	}
 
-	private TreeMap<TestObject, Object> empty, sequential, random;
+	private TreeMap<TestObject, TestObject> empty, sequential, random;
 
 	@BeforeEach
 	void setUp() {
@@ -115,9 +115,9 @@ class TreeMapTest {
 
 	@Test
 	void put() {
-		TestObject obj = new TestObject(sequential.size() - 1);
-		assertNull(empty.put(obj, new Object()));
-		assertEquals(PRESENT, sequential.put(obj, new Object()));
+		TestObject key = new TestObject(sequential.size() - 1);
+		assertNull(empty.put(key, TestObject.random()));
+		assertEquals(PRESENT, sequential.put(key, TestObject.random()));
 	}
 
 	@Test
@@ -160,7 +160,7 @@ class TreeMapTest {
 	@Test
 	void get() {
 		TestObject key = new TestObject(random.size());
-		Object value = new Object();
+		TestObject value = TestObject.random();
 		assertThrows(IllegalStateException.class, () -> empty.get(null));
 		assertThrows(NoSuchElementException.class, () -> sequential.get(null));
 		sequential.put(key, value);
