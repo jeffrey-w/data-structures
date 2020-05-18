@@ -493,6 +493,8 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 					};
 				}
 
+				private static final long serialVersionUID = 6328345911790358244L;
+
 			};
 			this.entries = entries;
 		}
