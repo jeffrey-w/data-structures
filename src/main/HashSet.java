@@ -1,12 +1,14 @@
 package main;
 
+// TODO fix JavaDoc
+
 /**
  * The {@code HashSet} class is a hash table implementation of the {@code Set} interface. This class offers constant
  * average time performance for {@code add}, {@code get}, and {@code remove} operations. Performance may be tuned by
- * supplying a load factor that determines how keys are dispersed (a lower load factor results in a more sparsely
+ * supplying a load factor that determines how elements are dispersed (a lower load factor results in a more sparsely
  * populated {@code Set}). Elements may be {@code null}.
  *
- * @param <E> the tyep of element in this {@code HashSet}
+ * @param <E> the type of element in this {@code HashSet}
  * @author Jeff Wilgus
  */
 public class HashSet<E> extends AbstractSet<E> {
