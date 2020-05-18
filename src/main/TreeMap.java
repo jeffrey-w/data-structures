@@ -2,6 +2,9 @@ package main;
 
 import util.DefaultComparator;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -498,6 +501,28 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	private static final long serialVersionUID = -2526600353447364806L;
 
-	// TODO read/write object
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		stream.writeInt(size);
+		stream.writeObject(comp);
+		for(Entry<K, V> entry : entrySet()) {
+			stream.writeObject(entry.getKey());
+			stream.writeObject(entry.getValue());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		int size;
+		stream.defaultReadObject();
+		size = stream.readInt();
+		comp = (Comparator<K>) Objects.requireNonNull(stream.readObject());
+		init();
+		for(int i = 0; i < size; i++) {
+			K key = (K) stream.readObject();
+			V value = (V) stream.readObject();
+			put(key, value);
+		}
+	}
 
 }
