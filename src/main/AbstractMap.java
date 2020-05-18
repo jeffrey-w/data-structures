@@ -127,6 +127,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 					};
 				}
 
+				private static final long serialVersionUID = 4131854097715185701L;
+
 			};
 			this.keys = keys;
 		}
@@ -193,7 +195,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 		return values;
 	}
 
-	static abstract class MinSet<E> implements Set<E> {
+	static abstract class MinSet<E> extends AbstractSet<E> {
 
 		@Override
 		public void add(final E element) {
@@ -204,6 +206,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 		public void remove(final E element) {
 			throw new UnsupportedOperationException();
 		}
+
+		private static final long serialVersionUID = 3620430710434884753L;
 
 	}
 
