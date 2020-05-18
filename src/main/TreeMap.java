@@ -166,41 +166,35 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	@Override
 	public V remove(final K key) {
-		return delete(search(root, key));
+		ensureNonEmpty();
+		return delete(search(root, key)).getValue();
 	}
 
 	@Override
 	public Entry<K, V> removeFirst() {
-		Node<K, V> first = minimum(root);
-		delete(first);
-		return first;
+		ensureNonEmpty();
+		return delete(minimum(root));
 	}
 
 	@Override
 	public Entry<K, V> removeLast() {
-		Node<K, V> last = maximum(root);
-		delete(last);
-		return last;
+		ensureNonEmpty();
+		return delete(maximum(root));
 	}
 
 	@Override
 	public Entry<K, V> removePrevious(final K key) {
-		Node<K, V> previous = predecessor(search(root, key));
-		delete(predecessor(previous));
-		return previous;
+		ensureNonEmpty();
+		return delete(predecessor(search(root, key)));
 	}
 
 	@Override
 	public Entry<K, V> removeNext(final K key) {
-		Node<K, V> next = successor(search(root, key));
-		delete(next);
-		return next;
+		ensureNonEmpty();
+		return delete(successor(search(root, key)));
 	}
 
-	V delete(Node<K, V> z) {
-		if (isEmpty()) {
-			throw new IllegalStateException();
-		}
+	Node<K, V> delete(Node<K, V> z) {
 		Node<K, V> y = z, x;
 		boolean original = y.color;
 		if (z.left == nil) {
@@ -230,7 +224,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 		}
 		z.invalidate();
 		size--;
-		return z.getValue();
+		return z;
 	}
 
 	private void transplant(Node<K, V> u, Node<K, V> v) {
@@ -338,34 +332,32 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	@Override
 	public V get(final K key) {
-		return validateNode(search(root, key)).getValue();
+		ensureNonEmpty();
+		return search(root, key).getValue();
 	}
 
 	@Override
 	public Entry<K, V> getFirst() {
-		return validateNode(minimum(root));
+		ensureNonEmpty();
+		return minimum(root);
 	}
 
 	@Override
 	public Entry<K, V> getLast() {
-		return validateNode(maximum(root));
+		ensureNonEmpty();
+		return maximum(root);
 	}
 
 	@Override
 	public Entry<K, V> getPrevious(final K key) {
-		return validateNode(predecessor(search(root, key)));
+		ensureNonEmpty();
+		return predecessor(search(root, key));
 	}
 
 	@Override
 	public Entry<K, V> getNext(final K key) {
-		return validateNode(successor(search(root, key)));
-	}
-
-	private Entry<K, V> validateNode(Node<K, V> node) {
-		if (isEmpty()) {
-			throw new IllegalStateException();
-		}
-		return node;
+		ensureNonEmpty();
+		return successor(search(root, key));
 	}
 
 	private Node<K, V> search(Node<K, V> root, K key) {
@@ -383,6 +375,9 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	}
 
 	private boolean lessThan(K a, K b) {
+		if (a == null) {
+			return b != null;
+		}
 		return comp.compare(a, b) < 0;
 	}
 
@@ -424,6 +419,12 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 		return y;
 	}
 
+	private void ensureNonEmpty() {
+		if (isEmpty()) {
+			throw new IllegalStateException();
+		}
+	}
+
 	private transient Set<Entry<K, V>> entries;
 
 	@Override
@@ -458,13 +459,12 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 				@Override
 				public Iterator<Entry<K, V>> iterator() {
 					return new Iterator<>() {
-						Node<K, V> current = root, last;
-						final Stack<Node<K, V>> s = new LinkedStack<>();
+						Node<K, V> current = minimum(root), last;
 						boolean removable = false;
 
 						@Override
 						public boolean hasNext() {
-							return !(current == nil && s.isEmpty());
+							return current != nil;
 						}
 
 						@Override
@@ -472,13 +472,9 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 							if (!hasNext()) {
 								throw new NoSuchElementException();
 							}
-							while (current != nil) {
-								s.push(current);
-								current = current.left;
-							}
-							last = s.pop();
-							current = last.right;
 							removable = true;
+							last = current;
+							current = successor(current);
 							return last;
 						}
 
