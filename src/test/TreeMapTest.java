@@ -117,7 +117,7 @@ class TreeMapTest {
 	@Test
 	void put() {
 		TestObject key = new TestObject(SIZE - 1);
-		assertNull(empty.put(key, TestObject.random()));
+		assertNull(empty.put(key, PRESENT));
 		assertEquals(PRESENT, sequential.put(key, TestObject.random()));
 	}
 
