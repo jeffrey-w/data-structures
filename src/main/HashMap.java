@@ -35,7 +35,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 					return bucket;
 				}
 			}
-			return null;
+			throw new NoSuchElementException();
 		}
 
 		V insert(K key, V value, HashMap<K, V> owner) {
@@ -103,7 +103,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	@Override
 	public boolean contains(final K key) {
-		return chainAt(key).getBucket(key) != null;
+		try {
+			chainAt(key).getBucket(key);
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -121,8 +126,10 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 			for (Object o : old) {
 				@SuppressWarnings("unchecked")
 				Chain<K, V> chain = (Chain<K, V>) o;
-				for (Bucket<K, V> bucket : chain) {
-					chain.insert(bucket.getKey(), bucket.getValue(), this);
+				if (chain != null) {
+					for (Bucket<K, V> bucket : chain) {
+						chain.insert(bucket.getKey(), bucket.getValue(), this);
+					}
 				}
 			}
 		}
@@ -130,7 +137,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	@Override
 	public V remove(final K key) {
-		return chainAt(key).remove(key);
+		V value = chainAt(key).remove(key);
+		size--;
+		return value;
 	}
 
 	@Override
@@ -140,6 +149,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	@SuppressWarnings("unchecked")
 	private Chain<K, V> chainAt(K key) {
+		if(isEmpty()) {
+			throw new IllegalStateException();
+		}
 		int index = compress(hash(key));
 		Object chain = data[index];
 		if (chain == null) {
@@ -175,7 +187,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 				@Override
 				public int size() {
-					return size;
+					return HashMap.this.size;
 				}
 
 				@Override
@@ -186,6 +198,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 				@Override
 				public Iterator<Entry<K, V>> iterator() {
 					return new Iterator<>() {
+
 						int index = 0, returned = 0;
 						Bucket<K, V> last;
 						Iterator<Bucket<K, V>> i;
@@ -193,7 +206,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 						@Override
 						public boolean hasNext() {
-							return returned < size;
+							return returned < size();
 						}
 
 						@SuppressWarnings("unchecked")
@@ -202,7 +215,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 							if (!hasNext()) {
 								throw new NoSuchElementException();
 							}
-							if (i == null || !i.hasNext()) {
+							if (i == null) {
 								while (data[index] == null) {
 									index++;
 								}
@@ -210,7 +223,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 							}
 							returned++;
 							removable = true;
-							return last = i.next();
+							last = i.next();
+							if(!i.hasNext()) {
+								index++;
+								i = null;
+							}
+							return last;
 						}
 
 						@Override
@@ -225,6 +243,8 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 					};
 				}
+
+				private static final long serialVersionUID = -2548516156968773633L;
 
 			};
 			this.entries = entries;
