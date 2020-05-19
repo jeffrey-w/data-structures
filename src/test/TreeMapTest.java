@@ -115,7 +115,7 @@ class TreeMapTest {
 
 	@Test
 	void put() {
-		TestObject key = new TestObject(sequential.size() - 1);
+		TestObject key = new TestObject(SIZE - 1);
 		assertNull(empty.put(key, TestObject.random()));
 		assertEquals(PRESENT, sequential.put(key, TestObject.random()));
 	}
@@ -124,7 +124,7 @@ class TreeMapTest {
 	void remove() {
 		assertThrows(IllegalStateException.class, () -> empty.remove(null));
 		assertThrows(NoSuchElementException.class, () -> sequential.remove(null));
-		assertEquals(sequential.getLast().getValue(), sequential.remove(new TestObject(sequential.size() - 1)));
+		assertEquals(sequential.getLast().getValue(), sequential.remove(new TestObject(SIZE - 1)));
 		halve(random);
 		removeRoot(random);
 		assertTrue(treeHeight(random) <= expectedHeight(random));
@@ -139,15 +139,14 @@ class TreeMapTest {
 	@Test
 	void removeLast() {
 		assertThrows(IllegalStateException.class, () -> empty.removeLast());
-		assertEquals(sequential.size() - 1, sequential.removeLast().getKey().getState());
+		assertEquals(SIZE - 1, sequential.removeLast().getKey().getState());
 	}
 
 	@Test
 	void removePrevious() {
 		assertThrows(IllegalStateException.class, () -> empty.removePrevious(null));
 		assertThrows(NoSuchElementException.class, () -> sequential.removePrevious(null));
-		assertEquals(sequential.size() - 2, sequential.removePrevious(sequential.getLast().getKey()).getKey()
-													  .getState());
+		assertEquals(SIZE - 2, sequential.removePrevious(sequential.getLast().getKey()).getKey().getState());
 	}
 
 	@Test
@@ -183,7 +182,7 @@ class TreeMapTest {
 	void getPrevious() {
 		assertThrows(IllegalStateException.class, () -> empty.getPrevious(null));
 		assertThrows(NoSuchElementException.class, () -> sequential.getPrevious(null));
-		assertEquals(sequential.size() - 2, sequential.getPrevious(sequential.getLast().getKey()).getKey().getState());
+		assertEquals(SIZE - 2, sequential.getPrevious(sequential.getLast().getKey()).getKey().getState());
 	}
 
 	@Test
