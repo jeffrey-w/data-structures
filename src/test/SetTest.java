@@ -24,9 +24,6 @@ final class SetTest {
 	}
 
 	static void testIsEmpty(Set<?> set) {
-		if (!set.isEmpty()) {
-			fail();
-		}
 		set.clear();
 		assertTrue(set.isEmpty());
 	}
@@ -58,6 +55,8 @@ final class SetTest {
 		}
 		assertEquals(--size, set.size());
 		assertFalse(set.contains(element));
+		set.clear();
+		assertThrows(IllegalStateException.class, () -> set.remove(element));
 	}
 
 	static <E> void testIterator(Set<E> empty, Set<E> full) {
