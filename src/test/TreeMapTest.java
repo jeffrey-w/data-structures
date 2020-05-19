@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,9 +195,14 @@ class TreeMapTest {
 
 	@Test
 	void entrySet() {
-		SetTest.testClear(sequential.entrySet());
-		SetTest.testContains(random.entrySet(), random.getFirst());
-		SetTest.testIterator(sequential.entrySet(), random.entrySet());
+		Iterator<Entry<TestObject, TestObject>> iterator = random.entrySet().iterator();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+		assertTrue(random.isEmpty());
+		assertThrows(NoSuchElementException.class, iterator::next);
+		assertThrows(IllegalStateException.class, iterator::remove);
 	}
 
 	@Test
