@@ -451,7 +451,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 				@Override
 				public int size() {
-					return size;
+					return TreeMap.this.size;
 				}
 
 				@Override
