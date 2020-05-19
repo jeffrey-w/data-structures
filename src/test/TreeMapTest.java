@@ -19,7 +19,7 @@ import static util.Common.RAND;
 @TestMethodOrder(OrderAnnotation.class)
 class TreeMapTest {
 
-	private static final int SIZE = 10_000;
+	private static final int SIZE = 2 << 20;
 	private static final TestObject PRESENT = TestObject.random();
 	private static TreeMap<TestObject, TestObject> PREV;
 
@@ -200,7 +200,7 @@ class TreeMapTest {
 			iterator.next();
 			iterator.remove();
 		}
-		assertTrue(random.isEmpty());
+		assertTrue(random.entrySet().isEmpty());
 		assertThrows(NoSuchElementException.class, iterator::next);
 		assertThrows(IllegalStateException.class, iterator::remove);
 	}
