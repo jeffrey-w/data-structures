@@ -58,7 +58,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
 	private int binarySearch(final E element) {
 		int mid, from = 0, to = size - 1;
-		E[] elements = toArray();
+		E[] elements = toArray(); // TODO this makes this function O(n)
 		while (from <= to) {
 			mid = (from + to) >> 1;
 			if (areEqual(element, elements[mid])) {
