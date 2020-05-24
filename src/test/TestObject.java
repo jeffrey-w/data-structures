@@ -60,5 +60,5 @@ final class TestObject implements Cloneable, Comparable<TestObject>, Serializabl
 	}
 
 	private static final long serialVersionUID = 3036974920060020389L;
-	
+
 }
