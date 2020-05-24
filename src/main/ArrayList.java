@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import static util.Common.DEFAULT_CAPACITY;
+import static util.Common.MAX_CAPACITY;
 
 /**
  * The {@code ArrayList} class is an array-based implementation of the {@code List} interface. {@code Position}-based
@@ -36,7 +37,7 @@ public class ArrayList<E> extends AbstractList<E> {
 	@Override
 	void init() {
 		size = 0;
-		comp = null;
+		state = null;
 		elements = new Object[DEFAULT_CAPACITY];
 	}
 
@@ -74,12 +75,14 @@ public class ArrayList<E> extends AbstractList<E> {
 		}
 		elements[index] = bucket;
 		size++;
-		comp = null;
+		state = null;
 		return bucket;
 	}
 
 	void ensureCapacity() {
-		// TODO need overflow handling
+		if(elements.length == MAX_CAPACITY) {
+			throw new OutOfMemoryError();
+		}
 		if (size == elements.length) {
 			elements = Arrays.copyOf(elements, elements.length << 1);
 		}
@@ -117,7 +120,7 @@ public class ArrayList<E> extends AbstractList<E> {
 		}
 		bucket.invalidate();
 		trimToSize();
-		comp = null;
+		state = null;
 		return bucket.getElement();
 	}
 
@@ -158,7 +161,7 @@ public class ArrayList<E> extends AbstractList<E> {
 
 	@Override
 	public E set(final int index, final E element) {
-		comp = null;
+		state = null;
 		return bucketAt(index).setElement(element);
 	}
 
