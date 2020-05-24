@@ -16,6 +16,11 @@ public class Common {
 	public static final int DEFAULT_CAPACITY = 8;
 
 	/**
+	 * The maximum size allocation for array-backed data structures.
+	 */
+	public static final int MAX_CAPACITY = 2 << 29;
+
+	/**
 	 * A common source of randomness.
 	 */
 	public static final ThreadLocalRandom RAND = ThreadLocalRandom.current();
