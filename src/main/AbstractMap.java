@@ -38,14 +38,14 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 
 	@Override
 	public void putIfAbsent(final K key, final V value) {
-		if(!contains(key)) {
+		if (!contains(key)) {
 			put(key, value);
 		}
 	}
 
 	@Override
 	public boolean removeIfPresent(final K key, final V value) {
-		if(contains(key) && areEqual(get(key), value)) {
+		if (contains(key) && areEqual(get(key), value)) {
 			remove(key);
 			return true;
 		}

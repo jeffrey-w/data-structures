@@ -55,10 +55,10 @@ abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements
 
 	@Override
 	public boolean equals(final Object obj) {
-		if(obj == this) {
+		if (obj == this) {
 			return true;
 		}
-		if(!(obj instanceof AbstractEntry)) {
+		if (!(obj instanceof AbstractEntry)) {
 			return false;
 		}
 		AbstractEntry<?, ?> entry = (AbstractEntry<?, ?>) obj;

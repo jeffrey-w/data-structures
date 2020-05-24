@@ -189,8 +189,8 @@ public class LinkedList<E> extends AbstractList<E> {
 	@Override
 	public ListIterator<E> listIterator(final Position<E> position) {
 		Node<E> node = validatePosition(position), current = head.next;
-		for(int i = 0; i < size; i++) {
-			if(current == node) {
+		for (int i = 0; i < size; i++) {
+			if (current == node) {
 				return new ListIter(i, node);
 			}
 			current = current.next;
@@ -228,7 +228,7 @@ public class LinkedList<E> extends AbstractList<E> {
 
 		@Override
 		public E next() {
-			if(!hasNext()) {
+			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
 			next++;
@@ -245,7 +245,7 @@ public class LinkedList<E> extends AbstractList<E> {
 
 		@Override
 		public E previous() {
-			if(!hasPrevious()) {
+			if (!hasPrevious()) {
 				throw new NoSuchElementException();
 			}
 			next--;
@@ -267,7 +267,7 @@ public class LinkedList<E> extends AbstractList<E> {
 
 		@Override
 		public void remove() {
-			if(!removable || added) {
+			if (!removable || added) {
 				throw new IllegalStateException();
 			}
 			removable = false;
@@ -277,7 +277,7 @@ public class LinkedList<E> extends AbstractList<E> {
 
 		@Override
 		public void set(final E e) {
-			if(!removable || added) {
+			if (!removable || added) {
 				throw new IllegalStateException();
 			}
 			setAt(current, e);

@@ -40,10 +40,10 @@ public abstract class AbstractDeque<E> extends AbstractListAdaptor<E> implements
 
 	@Override
 	public boolean equals(final Object obj) {
-		if(obj == this) {
+		if (obj == this) {
 			return true;
 		}
-		if(!(obj instanceof AbstractDeque)) {
+		if (!(obj instanceof AbstractDeque)) {
 			return false;
 		}
 		return data.equals(((AbstractDeque<?>) obj).data);
