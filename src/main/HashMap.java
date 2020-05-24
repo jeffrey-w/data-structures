@@ -98,6 +98,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	@Override
 	void init() {
+		size = 0;
 		data = new Object[DEFAULT_CAPACITY];
 	}
 
@@ -123,8 +124,11 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	}
 
 	private void ensureCapacity() {
-		// TODO need overflow handling
+		if(data.length == MAX_CAPACITY) {
+			throw new OutOfMemoryError();
+		}
 		if (size >= data.length * loadFactor) {
+			size = 0;
 			Object[] old = data;
 			data = new Object[old.length << 1];
 			for (Object o : old) {
@@ -132,7 +136,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 					@SuppressWarnings("unchecked")
 					Chain<K, V> chain = (Chain<K, V>) o;
 					for (Bucket<K, V> bucket : chain) {
-						chain.insert(bucket.getKey(), bucket.getValue(), this);
+						put(bucket.getKey(), bucket.getValue());
 					}
 				}
 			}
@@ -214,19 +218,61 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	private final class EntryIter implements Iterator<Entry<K, V>> {
 
-		@Override
-		public boolean hasNext() {
-			return false;
+		int index;
+		Iterator<Bucket<K, V>> current, next;
+		boolean removable;
+
+		@SuppressWarnings("unchecked")
+		EntryIter() {
+			index = -1;
+			if (!isEmpty()) {
+				advance();
+				current = ((Chain<K, V>) data[index]).iterator();
+				advance();
+				if (index < data.length) {
+					next = ((Chain<K, V>) data[index]).iterator();
+				}
+			}
+		}
+
+		private void advance() {
+			do {
+				index++;
+			} while (index < data.length && data[index] == null);
 		}
 
 		@Override
+		public boolean hasNext() {
+			return next != null;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
 		public Entry<K, V> next() {
-			return null;
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			if (!current.hasNext()) {
+				current = next;
+				advance();
+				if (index < data.length) {
+					next = ((Chain<K, V>) data[index]).iterator();
+				} else {
+					next = null;
+				}
+			}
+			removable = true;
+			return current.next();
 		}
 
 		@Override
 		public void remove() {
-
+			if (!removable) {
+				throw new IllegalStateException();
+			}
+			removable = false;
+			HashMap.this.size--;
+			current.remove();
 		}
 
 	}
@@ -246,13 +292,14 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		stream.defaultReadObject();
-		data = new Object[nextPowTwo(stream.readInt())];
+		int size = stream.readInt();
+		data = new Object[nextPowTwo(size)];
 		try {
 			loadFactor = validateLoadFactor(stream.readDouble());
 		} catch (IllegalArgumentException e) {
 			throw new InvalidObjectException("Load factor not on (0, 1).");
 		}
-		for (int i = 0; i < data.length; i++) {
+		for (int i = 0; i < size; i++) {
 			K key = (K) stream.readObject();
 			V value = (V) stream.readObject();
 			put(key, value);
