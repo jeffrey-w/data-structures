@@ -6,6 +6,7 @@ import util.Quicksort;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -22,7 +23,25 @@ import static util.Common.hash;
  */
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
-	Comparator<E> comp;
+	private static final class SortedState<E> implements Serializable {
+
+		E[] elements;
+		Comparator<E> comp;
+
+		SortedState(E[] elements, Comparator<E> comp) {
+			this.elements = elements;
+			this.comp = comp == null ? new DefaultComparator<>() : comp;
+		}
+
+		int compare(E a, E b) {
+			return comp.compare(a, b);
+		}
+
+		private static final long serialVersionUID = -348739883697046179L;
+
+	}
+
+	SortedState<E> state;
 
 	@Override
 	public boolean contains(final E element) {
@@ -53,18 +72,17 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 	}
 
 	private boolean isSorted() {
-		return comp != null;
+		return state != null;
 	}
 
 	private int binarySearch(final E element) {
 		int mid, from = 0, to = size - 1;
-		E[] elements = toArray(); // TODO this makes this function O(n)
 		while (from <= to) {
 			mid = (from + to) >> 1;
-			if (areEqual(element, elements[mid])) {
+			if (areEqual(element, state.elements[mid])) {
 				return mid;
 			}
-			if (comp.compare(element, elements[mid]) < 0) {
+			if (state.compare(element, state.elements[mid]) < 0) {
 				to = mid - 1;
 			} else {
 				from = mid + 1;
@@ -90,11 +108,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 		for (E element : elements) {
 			addLast(element);
 		}
-		setComp(comp);
-	}
-
-	private void setComp(final Comparator<E> comp) {
-		this.comp = comp == null ? new DefaultComparator<>() : comp;
+		state = new SortedState<>(elements, comp);
 	}
 
 	@Override
@@ -126,11 +140,34 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 	}
 
 	int validateIndex(final int index, final boolean isAddition) {
-		if(!isAddition && isEmpty()) {
+		if (!isAddition && isEmpty()) {
 			throw new IllegalStateException();
 		}
 		int bound = isAddition ? size + 1 : size;
 		return Objects.checkIndex(index, bound);
+	}
+
+	/**
+	 * Ensures that the specified {@code Position} is valid insofar as it belongs to this {@code AbstractCollection}.
+	 *
+	 * @param position the specified {@code Position}
+	 * @param type the expected type of the specified {@code Position}
+	 * @return the specified {@code Position} cast to the specified type of {@code AbstractPosition}
+	 * @throws IllegalArgumentException if the specified {@code Position} is not of the specified {@code type} or it is
+	 * not owned by this {@code AbstractCollection}
+	 * @throws IllegalStateException if this {@code AbstractCollection} is empty
+	 * @throws NullPointerException if the specified {@code Position} is {@code null}
+	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	AbstractPosition<E> validatePosition(Position<E> position, Class<? extends AbstractPosition> type) {
+		if (isEmpty()) {
+			throw new IllegalStateException();
+		}
+		AbstractPosition<E> abstractPosition;
+		if (!(type.isInstance(position)) || !(abstractPosition = type.cast(position)).isOwnedBy(this)) {
+			throw new IllegalArgumentException();
+		}
+		return abstractPosition;
 	}
 
 	private static final long serialVersionUID = -5752600475035029478L;
@@ -138,7 +175,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		s.defaultWriteObject();
 		s.writeInt(size);
-		s.writeObject(comp);
+		s.writeObject(state);
 		for (E element : this) {
 			s.writeObject(element);
 		}
@@ -150,7 +187,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 		s.defaultReadObject();
 		size = s.readInt();
 		init();
-		comp = (Comparator<E>) s.readObject();
+		state = (SortedState<E>) s.readObject();
 		for (int i = 0; i < size; i++) {
 			E element = (E) s.readObject();
 			addLast(element);
