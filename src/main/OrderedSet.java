@@ -2,8 +2,6 @@ package main;
 
 import java.util.NoSuchElementException;
 
-// TODO specify parameters as final
-
 /**
  * The {@code OrderedSet} interface specifies operations on a collection of unique elements that are sorted on a
  * prescribed order.
@@ -37,7 +35,7 @@ public interface OrderedSet<E> extends Set<E> {
 	 * @throws IllegalStateException if this {@code OrderedSet} is empty
 	 * @throws NoSuchElementException if there the specified {@code element} does not belong to this {@code OrderedSet}
 	 */
-	E removePrevious(E element);
+	E removePrevious(final E element);
 
 	/**
 	 * Removes the {@code element} in this {@code OrderedSet} immediately after that specified.
@@ -47,7 +45,7 @@ public interface OrderedSet<E> extends Set<E> {
 	 * @throws IllegalStateException if this {@code OrderedSet} is empty
 	 * @throws NoSuchElementException if there the specified {@code element} does not belong to this {@code OrderedSet}
 	 */
-	E removeNext(E element);
+	E removeNext(final E element);
 
 	/**
 	 * Retrieves the first element in this {@code OrderedSet}.
@@ -71,7 +69,7 @@ public interface OrderedSet<E> extends Set<E> {
 	 * @throws IllegalStateException if this {@code OrderedSet} is empty
 	 * @throws NoSuchElementException if there the specified {@code element} does not belong to this {@code OrderedSet}
 	 */
-	E getPrevious(E element);
+	E getPrevious(final E element);
 
 	/**
 	 * Retrieves the {@code element} in this {@code OrderedSet} immediately after that specified.
@@ -81,6 +79,6 @@ public interface OrderedSet<E> extends Set<E> {
 	 * @throws IllegalStateException if this {@code OrderedSet} is empty
 	 * @throws NoSuchElementException if there the specified {@code element} does not belong to this {@code OrderedSet}
 	 */
-	E getNext(E element);
+	E getNext(final E element);
 
 }

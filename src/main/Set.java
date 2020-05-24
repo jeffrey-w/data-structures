@@ -2,8 +2,6 @@ package main;
 
 import java.util.NoSuchElementException;
 
-// TODO specify parameters as final
-
 /**
  * The {@code Set} interface specifies operations on a collection of unique elements.
  *
@@ -17,7 +15,7 @@ public interface Set<E> extends Collection<E> {
 	 *
 	 * @param element the specified element
 	 */
-	void add(E element);
+	void add(final E element);
 
 	/**
 	 * Removes the specified {@code element} from this {@code Set}.
@@ -26,6 +24,6 @@ public interface Set<E> extends Collection<E> {
 	 * @throws IllegalStateException if this {@code Set} is empty
 	 * @throws NoSuchElementException if the specified {@code element} does not belong to this {@code Set}
 	 */
-	void remove(E element);
+	void remove(final E element);
 
 }

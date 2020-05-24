@@ -2,8 +2,6 @@ package main;
 
 import java.util.NoSuchElementException;
 
-// TODO specify parameters as final
-
 /**
  * The {@code Map} interface specifies operations on a collection of key-value pairs.
  *
@@ -26,7 +24,7 @@ public interface Map<K, V> {
 	 * @return {@code true} if there exists an association between the specified {@code key} and a value in this {@code
 	 * Map}
 	 */
-	boolean contains(K key);
+	boolean contains(final K key);
 
 	/**
 	 * Provides the number of entries in this {@code Map}.
@@ -49,7 +47,7 @@ public interface Map<K, V> {
 	 * @param value the specified value
 	 * @return the value previously associated with the specified {@code key} or {@code null} if none existed
 	 */
-	V put(K key, V value);
+	V put(final K key, final V value);
 
 	/**
 	 * Adds an entry to this {@code Map} associating the specified {@code key} to the specified {@code values} only if
@@ -58,7 +56,7 @@ public interface Map<K, V> {
 	 * @param key the specified key
 	 * @param value the specified value
 	 */
-	void putIfAbsent(K key, V value);
+	void putIfAbsent(final K key, final V value);
 
 	/**
 	 * Deletes an entry from this {@code Map} associating some value with the specified {@code key}.
@@ -69,7 +67,7 @@ public interface Map<K, V> {
 	 * @throws NoSuchElementException if there is no mapping between the specified {@code key} and a value in this
 	 * {@code Map}
 	 */
-	V remove(K key);
+	V remove(final K key);
 
 	/**
 	 * Removes the entry in this {@code Map} associating the specified {@code key} to the specified {@code value} only
@@ -80,7 +78,7 @@ public interface Map<K, V> {
 	 * @return {@code true} if a mapping between the specified {@code key} and {@code value} was successfully removed
 	 * from this {@code map}
 	 */
-	boolean removeIfPresent(K key, V value);
+	boolean removeIfPresent(final K key, final V value);
 
 	/**
 	 * Retrieves the value in this {@code Map} associated with the specified {@code key}.
@@ -90,7 +88,7 @@ public interface Map<K, V> {
 	 * @throws NoSuchElementException if there is no mapping between the specified {@code key} and a value in this
 	 * {@code Map}
 	 */
-	V get(K key);
+	V get(final K key);
 
 	/**
 	 * Replaces the {@code value} associated with the specified {@code key} with that specified.
@@ -100,7 +98,7 @@ public interface Map<K, V> {
 	 * @return the value associated with the specified {@code key}, or {@code null} if no entry in this {@code Map}
 	 * associates the specified {@code key} with a value
 	 */
-	V replace(K key, V value);
+	V replace(final K key, final V value);
 
 	/**
 	 * Provides an {@code Iterable} collection of the keys in this {@code Map}.

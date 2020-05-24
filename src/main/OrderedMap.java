@@ -2,8 +2,6 @@ package main;
 
 import java.util.NoSuchElementException;
 
-// TODO specify parameters as final
-
 /**
  * The {@code OrderedMap} interface specifies operations on a collection of key-value pairs that are sorted on a
  * prescribed order.
@@ -39,7 +37,7 @@ public interface OrderedMap<K, V> extends Map<K, V> {
 	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
 	 * key}
 	 */
-	Entry<K, V> removePrevious(K key);
+	Entry<K, V> removePrevious(final K key);
 
 	/**
 	 * Removes the {@code Entry} in this {@code OrderedMap} with the {@code key} immediately after that specified.
@@ -50,7 +48,7 @@ public interface OrderedMap<K, V> extends Map<K, V> {
 	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
 	 * key}
 	 */
-	Entry<K, V> removeNext(K key);
+	Entry<K, V> removeNext(final K key);
 
 	/**
 	 * Retrieves the first {@code Entry} in this {@code OrderedMap}.
@@ -78,7 +76,7 @@ public interface OrderedMap<K, V> extends Map<K, V> {
 	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
 	 * key}
 	 */
-	Entry<K, V> getPrevious(K key);
+	Entry<K, V> getPrevious(final K key);
 
 	/**
 	 * Retrieves the {@code Entry} in this {@code OrderedMap} associated with the {@code key} immediately after that
@@ -90,6 +88,6 @@ public interface OrderedMap<K, V> extends Map<K, V> {
 	 * @throws NoSuchElementException if there is no {@code Entry} in this {@code OrderedMap} with the specified {@code
 	 * key}
 	 */
-	Entry<K, V> getNext(K key);
+	Entry<K, V> getNext(final K key);
 
 }
