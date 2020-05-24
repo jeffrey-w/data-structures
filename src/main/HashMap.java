@@ -124,7 +124,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	}
 
 	private void ensureCapacity() {
-		if(data.length == MAX_CAPACITY) {
+		if (data.length == MAX_CAPACITY) {
 			throw new OutOfMemoryError();
 		}
 		if (size >= data.length * loadFactor) {
