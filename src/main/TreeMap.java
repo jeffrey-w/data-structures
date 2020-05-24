@@ -3,6 +3,7 @@ package main;
 import util.DefaultComparator;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Comparator;
@@ -507,7 +508,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 		stream.defaultWriteObject();
 		stream.writeInt(size);
 		stream.writeObject(comp);
-		for(Entry<K, V> entry : entrySet()) {
+		for (Entry<K, V> entry : entrySet()) {
 			stream.writeObject(entry.getKey());
 			stream.writeObject(entry.getValue());
 		}
@@ -515,12 +516,17 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-		int size;
 		stream.defaultReadObject();
-		size = stream.readInt();
-		comp = (Comparator<K>) Objects.requireNonNull(stream.readObject());
+		int size = stream.readInt();
+		if (size < 0) {
+			throw new InvalidObjectException("Size less than zero.");
+		}
+		comp = (Comparator<K>) stream.readObject();
+		if (comp == null) {
+			throw new InvalidObjectException("Null comparator.");
+		}
 		init();
-		for(int i = 0; i < size; i++) {
+		for (int i = 0; i < size; i++) {
 			K key = (K) stream.readObject();
 			V value = (V) stream.readObject();
 			put(key, value);
