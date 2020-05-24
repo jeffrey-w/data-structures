@@ -3,6 +3,8 @@ package main;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import static util.Common.areEqual;
+
 /**
  * The {@code AbstractMap} class is the base class from which all {@code Map} implementations shall be derived.
  *
@@ -32,6 +34,22 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 	@Override
 	public boolean isEmpty() {
 		return size == 0;
+	}
+
+	@Override
+	public void putIfAbsent(final K key, final V value) {
+		if(!contains(key)) {
+			put(key, value);
+		}
+	}
+
+	@Override
+	public boolean removeIfPresent(final K key, final V value) {
+		if(contains(key) && areEqual(get(key), value)) {
+			remove(key);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

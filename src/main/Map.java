@@ -2,6 +2,8 @@ package main;
 
 import java.util.NoSuchElementException;
 
+// TODO specify parameters as final
+
 /**
  * The {@code Map} interface specifies operations on a collection of key-value pairs.
  *
@@ -50,6 +52,15 @@ public interface Map<K, V> {
 	V put(K key, V value);
 
 	/**
+	 * Adds an entry to this {@code Map} associating the specified {@code key} to the specified {@code values} only if
+	 * another mapping from the specified {@code key} does not already exist.
+	 *
+	 * @param key the specified key
+	 * @param value the specified value
+	 */
+	void putIfAbsent(K key, V value);
+
+	/**
 	 * Deletes an entry from this {@code Map} associating some value with the specified {@code key}.
 	 *
 	 * @param key the specified key
@@ -59,6 +70,17 @@ public interface Map<K, V> {
 	 * {@code Map}
 	 */
 	V remove(K key);
+
+	/**
+	 * Removes the entry in this {@code Map} associating the specified {@code key} to the specified {@code value} only
+	 * if such a mapping from the specified {@code key} exists.
+	 *
+	 * @param key the specified key
+	 * @param value the specified value
+	 * @return {@code true} if a mapping between the specified {@code key} and {@code value} was successfully removed
+	 * from this {@code map}
+	 */
+	boolean removeIfPresent(K key, V value);
 
 	/**
 	 * Retrieves the value in this {@code Map} associated with the specified {@code key}.
@@ -71,7 +93,7 @@ public interface Map<K, V> {
 	V get(K key);
 
 	/**
-	 * Replaces the {@code value} associated with the specified {@code key} with that specified if another value is
+	 * Replaces the {@code value} associated with the specified {@code key} with that specified.
 	 *
 	 * @param key the specified key
 	 * @param value the specified value
