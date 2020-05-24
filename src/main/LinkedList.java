@@ -43,7 +43,7 @@ public class LinkedList<E> extends AbstractList<E> {
 	@Override
 	void init() {
 		size = 0;
-		comp = null;
+		state = null;
 		head = Node.emptyNode(this);
 		tail = Node.emptyNode(this);
 		head.next = tail;
@@ -83,7 +83,7 @@ public class LinkedList<E> extends AbstractList<E> {
 		prev.next = node;
 		next.prev = node;
 		size++;
-		comp = null;
+		state = null;
 		return node;
 	}
 
@@ -155,7 +155,7 @@ public class LinkedList<E> extends AbstractList<E> {
 	}
 
 	private E setAt(Node<E> node, E element) {
-		comp = null;
+		state = null;
 		return node.setElement(element);
 	}
 
@@ -271,7 +271,8 @@ public class LinkedList<E> extends AbstractList<E> {
 				throw new IllegalStateException();
 			}
 			removable = false;
-			unlink(current);
+			current = current.prev;
+			unlink(current.next);
 		}
 
 		@Override
@@ -317,7 +318,8 @@ public class LinkedList<E> extends AbstractList<E> {
 				throw new IllegalStateException();
 			}
 			removable = false;
-			unlink(current);
+			current = current.prev;
+			unlink(current.next);
 		}
 	}
 
