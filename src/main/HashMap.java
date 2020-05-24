@@ -1,5 +1,9 @@
 package main;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -124,9 +128,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 			Object[] old = data;
 			data = new Object[old.length << 1];
 			for (Object o : old) {
-				@SuppressWarnings("unchecked")
-				Chain<K, V> chain = (Chain<K, V>) o;
-				if (chain != null) {
+				if (o != null) {
+					@SuppressWarnings("unchecked")
+					Chain<K, V> chain = (Chain<K, V>) o;
 					for (Bucket<K, V> bucket : chain) {
 						chain.insert(bucket.getKey(), bucket.getValue(), this);
 					}
@@ -149,7 +153,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 	@SuppressWarnings("unchecked")
 	private Chain<K, V> chainAt(K key) {
-		if(isEmpty()) {
+		if (isEmpty()) {
 			throw new IllegalStateException();
 		}
 		int index = compress(hash(key));
@@ -197,51 +201,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 				@Override
 				public Iterator<Entry<K, V>> iterator() {
-					return new Iterator<>() {
-
-						int index = 0, returned = 0;
-						Bucket<K, V> last;
-						Iterator<Bucket<K, V>> i;
-						boolean removable = false;
-
-						@Override
-						public boolean hasNext() {
-							return returned < size();
-						}
-
-						@SuppressWarnings("unchecked")
-						@Override
-						public Entry<K, V> next() {
-							if (!hasNext()) {
-								throw new NoSuchElementException();
-							}
-							if (i == null) {
-								while (data[index] == null) {
-									index++;
-								}
-								i = ((Chain<K, V>) data[index]).iterator();
-							}
-							returned++;
-							removable = true;
-							last = i.next();
-							if(!i.hasNext()) {
-								index++;
-								i = null;
-							}
-							return last;
-						}
-
-						@Override
-						public void remove() {
-							if (!removable) {
-								throw new IllegalStateException();
-							}
-							returned--;
-							removable = false;
-							HashMap.this.remove(last.getKey());
-						}
-
-					};
+					return new EntryIter();
 				}
 
 				private static final long serialVersionUID = -2548516156968773633L;
@@ -252,8 +212,61 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		return entries;
 	}
 
+	private final class EntryIter implements Iterator<Entry<K, V>> {
+
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public Entry<K, V> next() {
+			return null;
+		}
+
+		@Override
+		public void remove() {
+
+		}
+
+	}
+
 	private static final long serialVersionUID = 2575388588879268752L;
 
-	// TODO read/write object
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		stream.writeInt(size);
+		stream.writeDouble(loadFactor);
+		for (Entry<K, V> entry : entrySet()) {
+			stream.writeObject(entry.getKey());
+			stream.writeObject(entry.getValue());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		stream.defaultReadObject();
+		data = new Object[nextPowTwo(stream.readInt())];
+		try {
+			loadFactor = validateLoadFactor(stream.readDouble());
+		} catch (IllegalArgumentException e) {
+			throw new InvalidObjectException("Load factor not on (0, 1).");
+		}
+		for (int i = 0; i < data.length; i++) {
+			K key = (K) stream.readObject();
+			V value = (V) stream.readObject();
+			put(key, value);
+		}
+	}
+
+	private int nextPowTwo(int size) throws InvalidObjectException {
+		if (size < 0) {
+			throw new InvalidObjectException("Size less than zero.");
+		}
+		while (Integer.bitCount(size) > 1) {
+			size++;
+		}
+		return size;
+	}
 
 }
