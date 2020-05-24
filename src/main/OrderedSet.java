@@ -2,6 +2,8 @@ package main;
 
 import java.util.NoSuchElementException;
 
+// TODO specify parameters as final
+
 /**
  * The {@code OrderedSet} interface specifies operations on a collection of unique elements that are sorted on a
  * prescribed order.
