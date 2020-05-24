@@ -11,16 +11,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.TestUtils.PATH;
-import static test.TestUtils.openTestDir;
+import static test.TestUtils.*;
 import static util.Common.RAND;
 
 @TestMethodOrder(OrderAnnotation.class)
 class TreeMapTest {
-
-	private static final int SIZE = 2 << 20;
-	private static final TestObject PRESENT = TestObject.random();
-	private static TreeMap<TestObject, TestObject> PREV;
 
 	private static boolean isSorted(TreeMap<TestObject, TestObject> map) {
 		TestObject last = null;
@@ -93,7 +88,7 @@ class TreeMapTest {
 	private TreeMap<TestObject, TestObject> empty, sequential, random;
 
 	@BeforeAll
-	public static void init() throws IOException {
+	public static void beforeAll() throws IOException {
 		openTestDir();
 	}
 
@@ -103,8 +98,8 @@ class TreeMapTest {
 		sequential = new TreeMap<>();
 		random = new TreeMap<>();
 		for (int i = 0; i < SIZE; i++) {
-			sequential.put(new TestObject(i), PRESENT);
-			random.put(TestObject.random(), PRESENT);
+			sequential.put(new TestObject(i), VALUE);
+			random.put(TestObject.random(), VALUE);
 		}
 		assertTrue(isSorted(random));
 		assertTrue(treeHeight(random) <= expectedHeight(random));
@@ -114,15 +109,15 @@ class TreeMapTest {
 	void contains() {
 		TestObject key = new TestObject(SIZE);
 		assertFalse(sequential.contains(key));
-		sequential.put(key, PRESENT);
+		sequential.put(key, VALUE);
 		assertTrue(sequential.contains(key));
 	}
 
 	@Test
 	void put() {
 		TestObject key = new TestObject(SIZE - 1);
-		assertNull(empty.put(key, PRESENT));
-		assertEquals(PRESENT, sequential.put(key, TestObject.random()));
+		assertNull(empty.put(key, VALUE));
+		assertEquals(VALUE, sequential.put(key, TestObject.random()));
 	}
 
 	@Test
@@ -212,11 +207,10 @@ class TreeMapTest {
 	@Test
 	@Order(1)
 	void writeObject() {
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(PATH + "TreeMap.out"))) {
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(PATH + "TreeMap.dat"))) {
 			out.writeObject(random);
 			PREV = random;
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -225,7 +219,7 @@ class TreeMapTest {
 	@Test
 	@Order(2)
 	void readObject() {
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(PATH + "TreeMap.out"))) {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(PATH + "TreeMap.dat"))) {
 			@SuppressWarnings("unchecked")
 			TreeMap<TestObject, TestObject> map = (TreeMap<TestObject, TestObject>) in.readObject();
 			assertEquals(PREV, map);
