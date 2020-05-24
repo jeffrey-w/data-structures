@@ -80,7 +80,7 @@ public class ArrayList<E> extends AbstractList<E> {
 	}
 
 	void ensureCapacity() {
-		if(elements.length == MAX_CAPACITY) {
+		if (elements.length == MAX_CAPACITY) {
 			throw new OutOfMemoryError();
 		}
 		if (size == elements.length) {
