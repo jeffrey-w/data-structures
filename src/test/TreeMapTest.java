@@ -2,11 +2,8 @@ package test;
 
 import main.Entry;
 import main.TreeMap;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -14,6 +11,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.TestUtils.PATH;
+import static test.TestUtils.openTestDir;
 import static util.Common.RAND;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -92,6 +91,11 @@ class TreeMapTest {
 	}
 
 	private TreeMap<TestObject, TestObject> empty, sequential, random;
+
+	@BeforeAll
+	public static void init() throws IOException {
+		openTestDir();
+	}
 
 	@BeforeEach
 	void setUp() {
@@ -208,23 +212,26 @@ class TreeMapTest {
 	@Test
 	@Order(1)
 	void writeObject() {
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TreeMap.out"))) {
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(PATH + "TreeMap.out"))) {
 			out.writeObject(random);
 			PREV = random;
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
 	}
 
 	@Test
 	@Order(2)
 	void readObject() {
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("TreeMap.out"))) {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(PATH + "TreeMap.out"))) {
 			@SuppressWarnings("unchecked")
 			TreeMap<TestObject, TestObject> map = (TreeMap<TestObject, TestObject>) in.readObject();
 			assertEquals(PREV, map);
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
+			fail();
 		}
 	}
 
