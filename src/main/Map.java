@@ -55,8 +55,10 @@ public interface Map<K, V> {
 	 *
 	 * @param key the specified key
 	 * @param value the specified value
+	 * @return {@code true} if a mapping between the specified {@code key} and {@code value} was successfully added to
+	 * this {@code map}
 	 */
-	void putIfAbsent(final K key, final V value);
+	boolean putIfAbsent(final K key, final V value);
 
 	/**
 	 * Deletes an entry from this {@code Map} associating some value with the specified {@code key}.
