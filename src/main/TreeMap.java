@@ -3,7 +3,6 @@ package main;
 import util.DefaultComparator;
 
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Comparator;
@@ -11,7 +10,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import static util.Common.areEqual;
+import static util.Common.*;
 
 /**
  * The {@code TreeMap} class is a red-black tree implementation of the {@code Map} interface. Entries are sorted by key
@@ -517,14 +516,8 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		stream.defaultReadObject();
-		int size = stream.readInt();
-		if (size < 0) {
-			throw new InvalidObjectException("Size less than zero.");
-		}
-		comp = (Comparator<K>) stream.readObject();
-		if (comp == null) {
-			throw new InvalidObjectException("Null comparator.");
-		}
+		int size = validateSize(stream.readInt());
+		comp = (Comparator<K>) validateObject(stream.readObject());
 		init();
 		for (int i = 0; i < size; i++) {
 			K key = (K) stream.readObject();
