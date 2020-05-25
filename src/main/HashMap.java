@@ -9,8 +9,6 @@ import java.util.NoSuchElementException;
 
 import static util.Common.*;
 
-// TODO fix JavaDoc
-
 /**
  * The {@code HashMap} class is a hash table implementation of the {@code Map} interface. This class offers constant
  * average time performance for {@code put}, {@code get}, and {@code remove} operations. Performance may be tuned by
@@ -294,13 +292,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		stream.defaultReadObject();
-		int size = stream.readInt();
+		int size = validateSize(stream.readInt());
 		data = new Object[nextPowTwo(size)];
-		try {
-			loadFactor = validateLoadFactor(stream.readDouble());
-		} catch (IllegalArgumentException e) {
-			throw new InvalidObjectException("Load factor not on (0, 1).");
-		}
+		loadFactor = readLoadFactor(stream);
 		for (int i = 0; i < size; i++) {
 			K key = (K) stream.readObject();
 			V value = (V) stream.readObject();
@@ -308,14 +302,24 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		}
 	}
 
-	private int nextPowTwo(int size) throws InvalidObjectException {
-		if (size < 0) {
-			throw new InvalidObjectException("Size less than zero.");
+	private int nextPowTwo(int size) {
+		if (size < DEFAULT_CAPACITY) {
+			return DEFAULT_CAPACITY;
 		}
 		while (Integer.bitCount(size) > 1) {
-			size++;
+			if ((++size & 1) != 0) { // i is odd and so cannot be a power of two.
+				size++;
+			}
 		}
 		return size;
+	}
+
+	private double readLoadFactor(ObjectInputStream stream) throws IOException {
+		try {
+			return validateLoadFactor(stream.readDouble());
+		} catch (IllegalArgumentException e) {
+			throw new InvalidObjectException("Load factor not on (0, 1).");
+		}
 	}
 
 }
