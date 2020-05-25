@@ -170,7 +170,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 				@Override
 				public boolean contains(final V value) {
 					for (K key : keySet()) {
-						if (get(key).equals(value)) {
+						if (areEqual(get(key), value)) {
 							return true;
 						}
 					}
