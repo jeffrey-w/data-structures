@@ -35,7 +35,7 @@ public class ArrayList<E> extends AbstractList<E> {
 	}
 
 	@Override
-	void init() {
+	protected void init() {
 		size = 0;
 		state = null;
 		elements = new Object[DEFAULT_CAPACITY];
