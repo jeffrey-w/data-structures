@@ -41,7 +41,7 @@ public class LinkedList<E> extends AbstractList<E> {
 	}
 
 	@Override
-	void init() {
+	protected void init() {
 		size = 0;
 		state = null;
 		head = Node.emptyNode(this);
