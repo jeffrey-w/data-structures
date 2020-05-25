@@ -1,5 +1,7 @@
 package util;
 
+import java.io.InvalidObjectException;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -18,7 +20,7 @@ public class Common {
 	/**
 	 * The maximum size allocation for array-backed data structures.
 	 */
-	public static final int MAX_CAPACITY = 2 << 29;
+	public static final int MAX_CAPACITY = 0x4000_0000;
 
 	/**
 	 * A common source of randomness.
@@ -49,6 +51,35 @@ public class Common {
 	 */
 	public static <E> int hash(E element) {
 		return element == null ? 0 : element.hashCode();
+	}
+
+	/**
+	 * Ensures that the specified {@code size} is non-negative.
+	 *
+	 * @param size the specified size
+	 * @return the specified {@code size} only if it is non-negative
+	 * @throws InvalidObjectException if the specified {@code size} is negative
+	 */
+	public static int validateSize(int size) throws InvalidObjectException {
+		if (size < 0) {
+			throw new InvalidObjectException("Size less than zero.");
+		}
+		return size;
+	}
+
+	/**
+	 * Ensures that the specified {@code Object} is not {@code null}.
+	 *
+	 * @param object the specified {@code Object}
+	 * @return the specified {@code Object} only if it is not {@code null}
+	 * @throws InvalidObjectException if the specified {@code Object} is {@code null}
+	 */
+	public static Object validateObject(Object object) throws InvalidObjectException {
+		try {
+			return Objects.requireNonNull(object);
+		} catch (NullPointerException e) {
+			throw new InvalidObjectException("Null data.");
+		}
 	}
 
 	private Common() {
