@@ -20,7 +20,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 	}
 
 	@Override
-	void init() {
+	protected void init() {
 		((AbstractMap<E, Void>) map).init();
 	}
 
@@ -70,7 +70,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 				return false;
 			}
 		}
-		return size == set.size;
+		return size() == set.size();
 	}
 
 	@Override
