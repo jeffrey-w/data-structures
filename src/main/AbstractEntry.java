@@ -10,7 +10,7 @@ import static util.Common.hash;
  * @param <V> the type of value of this {@code Entry}
  * @author Jeff Wilgus
  */
-public abstract  class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements Entry<K, V> {
+public abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements Entry<K, V> {
 
 	private final K key;
 	private V value;
