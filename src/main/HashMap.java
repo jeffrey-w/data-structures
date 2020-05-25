@@ -294,7 +294,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		stream.defaultReadObject();
 		int size = validateSize(stream.readInt());
 		data = new Object[nextPowTwo(size)];
-		loadFactor = readLoadFactor(stream);
+		loadFactor = validateLoadFactor(stream);
 		for (int i = 0; i < size; i++) {
 			K key = (K) stream.readObject();
 			V value = (V) stream.readObject();
@@ -302,7 +302,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		}
 	}
 
-	private int nextPowTwo(int size) {
+	private static int nextPowTwo(int size) {
 		if (size < DEFAULT_CAPACITY) {
 			return DEFAULT_CAPACITY;
 		}
@@ -314,7 +314,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		return size;
 	}
 
-	private double readLoadFactor(ObjectInputStream stream) throws IOException {
+	private static double validateLoadFactor(ObjectInputStream stream) throws IOException {
 		try {
 			return validateLoadFactor(stream.readDouble());
 		} catch (IllegalArgumentException e) {
