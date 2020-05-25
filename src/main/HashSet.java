@@ -1,7 +1,5 @@
 package main;
 
-// TODO fix JavaDoc
-
 /**
  * The {@code HashSet} class is a hash table implementation of the {@code Set} interface. This class offers constant
  * average time performance for {@code add}, {@code get}, and {@code remove} operations. Performance may be tuned by
