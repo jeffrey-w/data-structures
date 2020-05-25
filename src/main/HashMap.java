@@ -136,7 +136,8 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 					@SuppressWarnings("unchecked")
 					Chain<K, V> chain = (Chain<K, V>) o;
 					for (Bucket<K, V> bucket : chain) {
-						put(bucket.getKey(), bucket.getValue());
+						size++;
+						chainAt(bucket.getKey()).insert(bucket.getKey(), bucket.getValue(), this);
 					}
 				}
 			}
