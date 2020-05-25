@@ -23,7 +23,7 @@ import static util.Common.hash;
  */
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
-	private static final class SortedState<E> implements Serializable {
+	private static final class SortedState<E> implements Serializable { // TODO rename this
 
 		E[] elements;
 		Comparator<E> comp;
@@ -127,7 +127,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 				return false;
 			}
 		}
-		return size == list.size;
+		return size() == list.size();
 	}
 
 	@Override
