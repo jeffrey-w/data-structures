@@ -72,7 +72,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 	}
 
 	@Override
-	void init() {
+	protected void init() {
 		size = 0;
 		nil = Node.nil(this);
 		root = nil;
