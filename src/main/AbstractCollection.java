@@ -20,7 +20,7 @@ public abstract class AbstractCollection<E> implements Collection<E>, Serializab
 	/**
 	 * Puts this {@code AbstractCollection} into its native state.
 	 */
-	abstract void init();
+	protected abstract void init();
 
 	@Override
 	public int size() {
