@@ -6,7 +6,7 @@ package main;
  * @param <E> the type of element at this {@code AbstractPosition}
  * @author Jeff Wilgus
  */
-abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implements Position<E> {
+public abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implements Position<E> {
 
 	private E element;
 
@@ -18,7 +18,7 @@ abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implem
 	 * @param owner the {@code Collection} that owns this {@code AbstractPosition}
 	 * @throws NullPointerException if the specified {@code Collection} is {@code null}
 	 */
-	AbstractPosition(final E element, final Collection<E> owner) {
+	public AbstractPosition(final E element, final Collection<E> owner) {
 		super(owner);
 		this.element = element;
 	}
@@ -34,7 +34,7 @@ abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implem
 	 * @param element the specified element
 	 * @return the element previously carried by this {@code AbstractPosition}
 	 */
-	E setElement(final E element) {
+	public E setElement(final E element) {
 		E result = this.element;
 		this.element = element;
 		return result;
