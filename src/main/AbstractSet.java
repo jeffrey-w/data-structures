@@ -1,8 +1,11 @@
 package main;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 
-import static util.Common.hash;
+import static util.Common.*;
 
 /**
  * The {@code AbstractSet} class is the base class from which all {@code Set} implementations shall be derived.
@@ -84,6 +87,17 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 
 	private static final long serialVersionUID = -3360434002937380937L;
 
-	// TODO read/write object
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		stream.writeInt(size);
+		stream.writeObject(map);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		stream.defaultReadObject();
+		size = validateSize(stream.readInt());
+		map = (Map<E, Void>) validateObject(stream.readObject());
+	}
 
 }
