@@ -10,7 +10,7 @@ import static util.Common.hash;
  * @param <V> the type of value of this {@code Entry}
  * @author Jeff Wilgus
  */
-abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements Entry<K, V> {
+public abstract  class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements Entry<K, V> {
 
 	private final K key;
 	private V value;
@@ -25,7 +25,7 @@ abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements
 	 * @param owner the {@code Map} that owns this {@code AbstractEntry}
 	 * @throws NullPointerException if the specified {@code Map} is {@code null}
 	 */
-	AbstractEntry(final K key, final V value, final Map<K, V> owner) {
+	public AbstractEntry(final K key, final V value, final Map<K, V> owner) {
 		super(owner);
 		this.key = key;
 		this.value = value;
@@ -47,7 +47,7 @@ abstract class AbstractEntry<K, V> extends AbstractOwnable<Map<K, V>> implements
 	 * @param value the specified value
 	 * @return the value previously associated with this {@code AbstractEntry}'s key
 	 */
-	V setValue(final V value) {
+	public V setValue(final V value) {
 		V result = this.value;
 		this.value = value;
 		return result;
