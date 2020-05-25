@@ -6,14 +6,12 @@ import util.Quicksort;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import static util.Common.areEqual;
-import static util.Common.hash;
+import static util.Common.*;
 
 /**
  * The {@code AbstractList} is the base class from which all {@code List} implementations shall be derived.
@@ -23,12 +21,12 @@ import static util.Common.hash;
  */
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
-	private static final class SortedState<E> implements Serializable { // TODO rename this
+	private static final class Snapshot<E> {
 
 		E[] elements;
 		Comparator<E> comp;
 
-		SortedState(E[] elements, Comparator<E> comp) {
+		Snapshot(E[] elements, Comparator<E> comp) {
 			this.elements = elements;
 			this.comp = comp == null ? new DefaultComparator<>() : comp;
 		}
@@ -37,11 +35,9 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 			return comp.compare(a, b);
 		}
 
-		private static final long serialVersionUID = -348739883697046179L;
-
 	}
 
-	SortedState<E> state;
+	transient Snapshot<E> state;
 
 	@Override
 	public boolean contains(final E element) {
@@ -108,7 +104,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 		for (E element : elements) {
 			addLast(element);
 		}
-		state = new SortedState<>(elements, comp);
+		state = new Snapshot<>(elements, comp);
 	}
 
 	@Override
@@ -172,24 +168,21 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
 	private static final long serialVersionUID = -5752600475035029478L;
 
-	private void writeObject(ObjectOutputStream s) throws IOException {
-		s.defaultWriteObject();
-		s.writeInt(size);
-		s.writeObject(state);
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		stream.writeInt(size);
 		for (E element : this) {
-			s.writeObject(element);
+			stream.writeObject(element);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
-		int size;
-		s.defaultReadObject();
-		size = s.readInt();
+	private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+		stream.defaultReadObject();
+		size = validateSize(stream.readInt());
 		init();
-		state = (SortedState<E>) s.readObject();
 		for (int i = 0; i < size; i++) {
-			E element = (E) s.readObject();
+			E element = (E) stream.readObject();
 			addLast(element);
 		}
 	}
