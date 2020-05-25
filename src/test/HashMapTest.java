@@ -17,7 +17,7 @@ class HashMapTest {
 
 	@BeforeAll
 	static void beforeAll() throws IOException {
-		openTestDir();
+		openTestDir(PATH);
 	}
 
 	@BeforeEach

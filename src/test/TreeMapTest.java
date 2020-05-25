@@ -89,7 +89,7 @@ class TreeMapTest {
 
 	@BeforeAll
 	public static void beforeAll() throws IOException {
-		openTestDir();
+		openTestDir(PATH);
 	}
 
 	@BeforeEach
