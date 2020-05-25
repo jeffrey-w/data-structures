@@ -24,7 +24,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 	/**
 	 * Puts this {@code AbstractMap} into its native state.
 	 */
-	abstract void init();
+	protected abstract void init();
 
 	@Override
 	public int size() {
@@ -37,10 +37,12 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 	}
 
 	@Override
-	public void putIfAbsent(final K key, final V value) {
+	public boolean putIfAbsent(final K key, final V value) {
 		if (!contains(key)) {
 			put(key, value);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -114,7 +116,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 
 				@Override
 				public int size() {
-					return size;
+					return AbstractMap.this.size;
 				}
 
 				@Override
@@ -125,6 +127,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 				@Override
 				public Iterator<K> iterator() {
 					return new Iterator<>() {
+
 						final Iterator<Entry<K, V>> i = entrySet().iterator();
 
 						@Override
@@ -157,11 +160,11 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 	public Collection<V> values() {
 		Collection<V> values = this.values;
 		if (values == null) {
-			values = new Collection<>() {
+			values = new AbstractCollection<>() {
 
 				@Override
-				public void clear() {
-					AbstractMap.this.clear();
+				protected void init() {
+					AbstractMap.this.init();
 				}
 
 				@Override
@@ -176,17 +179,13 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 
 				@Override
 				public int size() {
-					return size;
-				}
-
-				@Override
-				public boolean isEmpty() {
-					return AbstractMap.this.isEmpty();
+					return AbstractMap.this.size;
 				}
 
 				@Override
 				public Iterator<V> iterator() {
 					return new Iterator<>() {
+
 						final Iterator<Entry<K, V>> i = entrySet().iterator();
 
 						@Override
@@ -206,6 +205,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
 
 					};
 				}
+
+				private static final long serialVersionUID = -3052619367658786907L;
 
 			};
 			this.values = values;
