@@ -1,7 +1,12 @@
 package main;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
+
+import static util.Common.validateObject;
 
 /**
  * The {@code AbstractListAdaptor} is the base class from which all {@code List} adaptors shall be derived.
@@ -50,6 +55,15 @@ public abstract class AbstractListAdaptor<E> implements Collection<E>, Serializa
 
 	private static final long serialVersionUID = -5616829587411714697L;
 
-	// TODO read/write object
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		stream.writeObject(data);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		stream.defaultReadObject();
+		data = (List<E>) validateObject(stream.readObject());
+	}
 
 }
