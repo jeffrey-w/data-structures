@@ -53,7 +53,9 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 		}
 
 		V remove(K key) {
-			return remove(indexOf(getBucket(key))).getValue();
+			Bucket<K, V> bucket = remove(indexOf(getBucket(key)));
+			bucket.invalidate();
+			return bucket.getValue();
 		}
 
 		private static final long serialVersionUID = -7957845362854571964L;
@@ -97,7 +99,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
 
 	@Override
-	void init() {
+	protected void init() {
 		size = 0;
 		data = new Object[DEFAULT_CAPACITY];
 	}
@@ -235,12 +237,6 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 			}
 		}
 
-		private void advance() {
-			do {
-				index++;
-			} while (index < data.length && data[index] == null);
-		}
-
 		@Override
 		public boolean hasNext() {
 			return next != null;
@@ -263,6 +259,12 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 			}
 			removable = true;
 			return current.next();
+		}
+
+		private void advance() {
+			do {
+				index++;
+			} while (index < data.length && data[index] == null);
 		}
 
 		@Override
