@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import static test.TestUtils.SIZE;
 import static util.Common.areEqual;
 
-public class TestMap extends AbstractMap<Integer, TestObject> {
+final class TestMap extends AbstractMap<Integer, TestObject> {
 
 	private static final class TestEntry extends AbstractEntry<Integer, TestObject> {
 
