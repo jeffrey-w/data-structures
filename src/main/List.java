@@ -13,14 +13,14 @@ public interface List<E> extends Collection<E>, Sortable<E> {
 
 
 	/**
-	 * Adds the specified {@code element} to this {@code list} at the specified {@code index}.
+	 * Adds the specified {@code element} to this {@code list} at the specified {@code index}. The specified {@code
+	 * element} is inserted before any elements at or after the specified {@code index}.
 	 *
 	 * @param index the specified index
 	 * @param element the specified element
 	 * @return the {@code Position} the specified {@code element} was inserted in
-	 * @throws IndexOutOfBoundsException if the specified {@code index} is negative or greater than or equal to the
-	 * size
-	 * of this {@code List}
+	 * @throws IndexOutOfBoundsException if the specified {@code index} is negative or greater than the size of this
+	 * {@code List}
 	 */
 	Position<E> add(final int index, final E element);
 
