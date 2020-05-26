@@ -50,7 +50,7 @@ public interface Map<K, V> {
 	V put(final K key, final V value);
 
 	/**
-	 * Adds an entry to this {@code Map} associating the specified {@code key} to the specified {@code values} only if
+	 * Adds an entry to this {@code Map} associating the specified {@code key} to the specified {@code value} only if
 	 * another mapping from the specified {@code key} does not already exist.
 	 *
 	 * @param key the specified key
