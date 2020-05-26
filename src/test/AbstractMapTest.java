@@ -16,13 +16,9 @@ class AbstractMapTest {
 	private static TestMap copy(TestMap map) {
 		TestMap copy = new TestMap();
 		for (Entry<Integer, TestObject> entry : map.entrySet()) {
-			copy.put(entry.getKey(), new TestObject(entry.getValue().getState()));
+			copy.put(entry.getKey(), entry.getValue().clone());
 		}
 		return copy;
-	}
-
-	private static String entryToString(Entry<Integer, TestObject> entry) {
-		return "{" + entry.getKey().toString() + " : " + entry.getValue().toString() + "}";
 	}
 
 	private TestMap empty, full;
@@ -78,10 +74,7 @@ class AbstractMapTest {
 		assertNotEquals(full, null);
 		assertNotEquals(full, new Object());
 		assertNotEquals(full, empty);
-		TestMap copy = new TestMap();
-		for (int i = 0; i < SIZE; i++) {
-			copy.put(i, new TestObject(full.get(i).getState()));
-		}
+		TestMap copy = copy(full);
 		assertEquals(full, copy);
 	}
 
