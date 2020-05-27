@@ -8,18 +8,18 @@ package main;
  */
 public interface Entry<K, V> {
 
-	/**
-	 * Provides the key to this {@code Entry}.
-	 *
-	 * @return the key to this {@code Entry}
-	 */
-	K getKey();
+    /**
+     * Provides the key to this {@code Entry}.
+     *
+     * @return the key to this {@code Entry}
+     */
+    K getKey();
 
-	/**
-	 * Provides the value of this {@code Entry}
-	 *
-	 * @return the value of this {@code Entry}
-	 */
-	V getValue();
+    /**
+     * Provides the value of this {@code Entry}
+     *
+     * @return the value of this {@code Entry}
+     */
+    V getValue();
 
 }

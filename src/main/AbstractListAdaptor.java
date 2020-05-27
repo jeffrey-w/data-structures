@@ -16,54 +16,54 @@ import static util.Common.validateObject;
  */
 public abstract class AbstractListAdaptor<E> implements Collection<E>, Serializable {
 
-	List<E> data;
+    List<E> data;
 
-	@Override
-	public void clear() {
-		data.clear();
-	}
+    @Override
+    public void clear() {
+        data.clear();
+    }
 
-	@Override
-	public boolean contains(final E element) {
-		return data.contains(element);
-	}
+    @Override
+    public boolean contains(final E element) {
+        return data.contains(element);
+    }
 
-	@Override
-	public int size() {
-		return data.size();
-	}
+    @Override
+    public int size() {
+        return data.size();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return data.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
 
-	@Override
-	public Iterator<E> iterator() {
-		return data.iterator();
-	}
+    @Override
+    public Iterator<E> iterator() {
+        return data.iterator();
+    }
 
-	@Override
-	public int hashCode() {
-		return data.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return data.hashCode();
+    }
 
-	@Override
-	public String toString() {
-		return data.toString();
-	}
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 
-	private static final long serialVersionUID = -5616829587411714697L;
+    private static final long serialVersionUID = -5616829587411714697L;
 
-	private void writeObject(ObjectOutputStream stream) throws IOException {
-		stream.defaultWriteObject();
-		stream.writeObject(data);
-	}
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeObject(data);
+    }
 
-	@SuppressWarnings("unchecked")
-	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-		stream.defaultReadObject();
-		data = (List<E>) validateObject(stream.readObject());
-	}
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        data = (List<E>)validateObject(stream.readObject());
+    }
 
 }

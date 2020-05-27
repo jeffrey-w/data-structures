@@ -9,50 +9,50 @@ package main;
  */
 public interface Deque<E> extends Collection<E> {
 
-	/**
-	 * Adds the specified {@code element} to the front of this {@code Deque}.
-	 *
-	 * @param element the specified element
-	 */
-	void addFirst(E element);
+    /**
+     * Adds the specified {@code element} to the front of this {@code Deque}.
+     *
+     * @param element the specified element
+     */
+    void addFirst(E element);
 
-	/**
-	 * Adds the specified {@code element} to the end of this {@code Deque}.
-	 *
-	 * @param element the specified element
-	 */
-	void addLast(E element);
+    /**
+     * Adds the specified {@code element} to the end of this {@code Deque}.
+     *
+     * @param element the specified element
+     */
+    void addLast(E element);
 
-	/**
-	 * Removes the element at the front of this {@code Deque}.
-	 *
-	 * @return the element at the front of this {@code Deque}
-	 * @throws IllegalStateException if this {@code Deque} is empty
-	 */
-	E removeFirst();
+    /**
+     * Removes the element at the front of this {@code Deque}.
+     *
+     * @return the element at the front of this {@code Deque}
+     * @throws IllegalStateException if this {@code Deque} is empty
+     */
+    E removeFirst();
 
-	/**
-	 * Removes the element at the end of this {@code Deque}.
-	 *
-	 * @return the element at the end of this {@code Deque}
-	 * @throws IllegalStateException if this {@code Deque} is empty
-	 */
-	E removeLast();
+    /**
+     * Removes the element at the end of this {@code Deque}.
+     *
+     * @return the element at the end of this {@code Deque}
+     * @throws IllegalStateException if this {@code Deque} is empty
+     */
+    E removeLast();
 
-	/**
-	 * Provides the element at the front of this {@code Deque}.
-	 *
-	 * @return the element at the front of this {@code Deque}
-	 * @throws IllegalStateException if this {@code Deque} is empty
-	 */
-	E getFirst();
+    /**
+     * Provides the element at the front of this {@code Deque}.
+     *
+     * @return the element at the front of this {@code Deque}
+     * @throws IllegalStateException if this {@code Deque} is empty
+     */
+    E getFirst();
 
-	/**
-	 * Provides the element at the end of this {@code Deque}.
-	 *
-	 * @return the element at the end of this {@code Deque}
-	 * @throws IllegalStateException if this {@code Deque} is empty
-	 */
-	E getLast();
+    /**
+     * Provides the element at the end of this {@code Deque}.
+     *
+     * @return the element at the end of this {@code Deque}
+     * @throws IllegalStateException if this {@code Deque} is empty
+     */
+    E getLast();
 
 }

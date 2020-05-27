@@ -8,11 +8,11 @@ package main;
  */
 public interface Position<E> {
 
-	/**
-	 * Retrieves the element at this {@code Position}.
-	 *
-	 * @return the element at this {@code Position}
-	 */
-	E getElement();
+    /**
+     * Retrieves the element at this {@code Position}.
+     *
+     * @return the element at this {@code Position}
+     */
+    E getElement();
 
 }

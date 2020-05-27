@@ -8,13 +8,13 @@ package main;
  */
 public class ArrayDeque<E> extends AbstractDeque<E> {
 
-	/**
-	 * Constructs a new {@code ArrayDeque} object.
-	 */
-	public ArrayDeque() {
-		data = new ArrayList<>();
-	}
+    /**
+     * Constructs a new {@code ArrayDeque} object.
+     */
+    public ArrayDeque() {
+        data = new ArrayList<>();
+    }
 
-	private static final long serialVersionUID = 1037874193195017109L;
+    private static final long serialVersionUID = 1037874193195017109L;
 
 }

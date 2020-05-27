@@ -8,13 +8,13 @@ package main;
  */
 public class ArrayStack<E> extends AbstractStack<E> {
 
-	/**
-	 * Constructs a new {@code ArrayStack} object.
-	 */
-	public ArrayStack() {
-		data = new ArrayList<>();
-	}
+    /**
+     * Constructs a new {@code ArrayStack} object.
+     */
+    public ArrayStack() {
+        data = new ArrayList<>();
+    }
 
-	private static final long serialVersionUID = 4385986773919661768L;
+    private static final long serialVersionUID = 4385986773919661768L;
 
 }

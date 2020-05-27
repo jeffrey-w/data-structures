@@ -8,35 +8,35 @@ package main;
  */
 public abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implements Position<E> {
 
-	private E element;
+    private E element;
 
-	/**
-	 * Constructs a new {@code AbstractPosition} object that carries the specified {@code element} and belongs to the
-	 * specified {@code Collection}.
-	 *
-	 * @param element the specified {@code element}
-	 * @param owner the {@code Collection} that owns this {@code AbstractPosition}
-	 * @throws NullPointerException if the specified {@code Collection} is {@code null}
-	 */
-	public AbstractPosition(final E element, final Collection<E> owner) {
-		super(owner);
-		this.element = element;
-	}
+    /**
+     * Constructs a new {@code AbstractPosition} object that carries the specified {@code element} and belongs to the
+     * specified {@code Collection}.
+     *
+     * @param element the specified {@code element}
+     * @param owner the {@code Collection} that owns this {@code AbstractPosition}
+     * @throws NullPointerException if the specified {@code Collection} is {@code null}
+     */
+    public AbstractPosition(final E element, final Collection<E> owner) {
+        super(owner);
+        this.element = element;
+    }
 
-	@Override
-	public E getElement() {
-		return element;
-	}
+    @Override
+    public E getElement() {
+        return element;
+    }
 
-	/**
-	 * Sets the {@code element} carried by this {@code AbstractPosition} to the one specified.
-	 *
-	 * @param element the specified element
-	 * @return the element previously carried by this {@code AbstractPosition}
-	 */
-	public E setElement(final E element) {
-		E result = this.element;
-		this.element = element;
-		return result;
-	}
+    /**
+     * Sets the {@code element} carried by this {@code AbstractPosition} to the one specified.
+     *
+     * @param element the specified element
+     * @return the element previously carried by this {@code AbstractPosition}
+     */
+    public E setElement(final E element) {
+        E result = this.element;
+        this.element = element;
+        return result;
+    }
 }

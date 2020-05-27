@@ -11,24 +11,24 @@ package main;
  */
 public class HashSet<E> extends AbstractSet<E> {
 
-	/**
-	 * Constructs a new {@code HashSet} object.
-	 */
-	public HashSet() {
-		map = new HashMap<>();
-	}
+    /**
+     * Constructs a new {@code HashSet} object.
+     */
+    public HashSet() {
+        map = new HashMap<>();
+    }
 
-	/**
-	 * Constructs a new {@code HashSet} object with the specified {@code loadFactor}.
-	 *
-	 * @param loadFactor the specified load factor
-	 * @throws IllegalArgumentException if the specified {@code loadFactor} is not on the open interval bounded by zero
-	 * and one
-	 */
-	public HashSet(double loadFactor) {
-		map = new HashMap<>(loadFactor);
-	}
+    /**
+     * Constructs a new {@code HashSet} object with the specified {@code loadFactor}.
+     *
+     * @param loadFactor the specified load factor
+     * @throws IllegalArgumentException if the specified {@code loadFactor} is not on the open interval bounded by zero
+     * and one
+     */
+    public HashSet(double loadFactor) {
+        map = new HashMap<>(loadFactor);
+    }
 
-	private static final long serialVersionUID = 323140859808317776L;
+    private static final long serialVersionUID = 323140859808317776L;
 
 }

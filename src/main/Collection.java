@@ -8,31 +8,31 @@ package main;
  */
 public interface Collection<E> extends Iterable<E> {
 
-	/**
-	 * Removes all elements from this {@code Collection}.
-	 */
-	void clear();
+    /**
+     * Removes all elements from this {@code Collection}.
+     */
+    void clear();
 
-	/**
-	 * Determines whether or not the specified {@code element} is in this {@code Collection}.
-	 *
-	 * @param element the specified element
-	 * @return {@code true} if the specified {@code element} is in this {@code Collection}
-	 */
-	boolean contains(final E element);
+    /**
+     * Determines whether or not the specified {@code element} is in this {@code Collection}.
+     *
+     * @param element the specified element
+     * @return {@code true} if the specified {@code element} is in this {@code Collection}
+     */
+    boolean contains(final E element);
 
-	/**
-	 * Provides the number of the elements in this {@code Collection}.
-	 *
-	 * @return the size of this {@code Collection}
-	 */
-	int size();
+    /**
+     * Provides the number of the elements in this {@code Collection}.
+     *
+     * @return the size of this {@code Collection}
+     */
+    int size();
 
-	/**
-	 * Determines whether or not there are any elements in this {@code Collection}.
-	 *
-	 * @return {@code true} if this {@code Collection} has no elements in it.
-	 */
-	boolean isEmpty();
+    /**
+     * Determines whether or not there are any elements in this {@code Collection}.
+     *
+     * @return {@code true} if this {@code Collection} has no elements in it.
+     */
+    boolean isEmpty();
 
 }

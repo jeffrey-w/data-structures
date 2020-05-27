@@ -8,13 +8,13 @@ package main;
  */
 public class ArrayQueue<E> extends AbstractQueue<E> {
 
-	/**
-	 * Constructs a new {@code ArrayQueue} object.
-	 */
-	public ArrayQueue() {
-		data = new ArrayList<>();
-	}
+    /**
+     * Constructs a new {@code ArrayQueue} object.
+     */
+    public ArrayQueue() {
+        data = new ArrayList<>();
+    }
 
-	private static final long serialVersionUID = -6973538396761781940L;
+    private static final long serialVersionUID = -6973538396761781940L;
 
 }

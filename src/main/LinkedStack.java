@@ -8,13 +8,13 @@ package main;
  */
 public class LinkedStack<E> extends AbstractStack<E> {
 
-	/**
-	 * Constructs a new {@code LinkedStack} object.
-	 */
-	public LinkedStack() {
-		data = new LinkedList<>();
-	}
+    /**
+     * Constructs a new {@code LinkedStack} object.
+     */
+    public LinkedStack() {
+        data = new LinkedList<>();
+    }
 
-	private static final long serialVersionUID = -8808438556908560096L;
+    private static final long serialVersionUID = -8808438556908560096L;
 
 }

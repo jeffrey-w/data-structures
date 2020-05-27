@@ -10,20 +10,20 @@ import java.util.NoSuchElementException;
  */
 public interface Set<E> extends Collection<E> {
 
-	/**
-	 * Adds the specified {@code} element to this {@code Set} if it is not already a member.
-	 *
-	 * @param element the specified element
-	 */
-	void add(final E element);
+    /**
+     * Adds the specified {@code} element to this {@code Set} if it is not already a member.
+     *
+     * @param element the specified element
+     */
+    void add(final E element);
 
-	/**
-	 * Removes the specified {@code element} from this {@code Set}.
-	 *
-	 * @param element the specifies element
-	 * @throws IllegalStateException if this {@code Set} is empty
-	 * @throws NoSuchElementException if the specified {@code element} does not belong to this {@code Set}
-	 */
-	void remove(final E element);
+    /**
+     * Removes the specified {@code element} from this {@code Set}.
+     *
+     * @param element the specifies element
+     * @throws IllegalStateException if this {@code Set} is empty
+     * @throws NoSuchElementException if the specified {@code element} does not belong to this {@code Set}
+     */
+    void remove(final E element);
 
 }

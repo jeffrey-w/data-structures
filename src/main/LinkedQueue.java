@@ -8,13 +8,13 @@ package main;
  */
 public class LinkedQueue<E> extends AbstractQueue<E> {
 
-	/**
-	 * Constructs a new {@code LinkedQueue} object.
-	 */
-	public LinkedQueue() {
-		data = new LinkedList<>();
-	}
+    /**
+     * Constructs a new {@code LinkedQueue} object.
+     */
+    public LinkedQueue() {
+        data = new LinkedList<>();
+    }
 
-	private static final long serialVersionUID = -6137631008777715031L;
+    private static final long serialVersionUID = -6137631008777715031L;
 
 }

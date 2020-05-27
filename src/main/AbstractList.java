@@ -21,170 +21,170 @@ import static util.Common.*;
  */
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
-	private static final class Snapshot<E> {
+    private static final class Snapshot<E> {
 
-		E[] elements;
-		Comparator<E> comp;
+        E[] elements;
+        Comparator<E> comp;
 
-		Snapshot(E[] elements, Comparator<E> comp) {
-			this.elements = elements;
-			this.comp = comp == null ? new DefaultComparator<>() : comp;
-		}
+        Snapshot(E[] elements, Comparator<E> comp) {
+            this.elements = elements;
+            this.comp = comp == null ? new DefaultComparator<>() : comp;
+        }
 
-		int compare(E a, E b) {
-			return comp.compare(a, b);
-		}
+        int compare(E a, E b) {
+            return comp.compare(a, b);
+        }
 
-	}
+    }
 
-	transient Snapshot<E> state;
+    transient Snapshot<E> state;
 
-	@Override
-	public boolean contains(final E element) {
-		if (isSorted()) {
-			return binaryContains(element);
-		}
-		for (E e : this) {
-			if (areEqual(element, e)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean contains(final E element) {
+        if (isSorted()) {
+            return binaryContains(element);
+        }
+        for (E e : this) {
+            if (areEqual(element, e)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public int indexOf(final E element) {
-		if (isSorted()) {
-			return binarySearch(element);
-		}
-		int index = 0;
-		for (E e : this) {
-			if (areEqual(element, e)) {
-				return index;
-			}
-			index++;
-		}
-		throw new NoSuchElementException();
-	}
+    @Override
+    public int indexOf(final E element) {
+        if (isSorted()) {
+            return binarySearch(element);
+        }
+        int index = 0;
+        for (E e : this) {
+            if (areEqual(element, e)) {
+                return index;
+            }
+            index++;
+        }
+        throw new NoSuchElementException();
+    }
 
-	private boolean isSorted() {
-		return state != null;
-	}
+    private boolean isSorted() {
+        return state != null;
+    }
 
-	private int binarySearch(final E element) {
-		int mid, from = 0, to = size - 1;
-		while (from <= to) {
-			mid = (from + to) >> 1;
-			if (areEqual(element, state.elements[mid])) {
-				return mid;
-			}
-			if (state.compare(element, state.elements[mid]) < 0) {
-				to = mid - 1;
-			} else {
-				from = mid + 1;
-			}
-		}
-		throw new NoSuchElementException();
-	}
+    private int binarySearch(final E element) {
+        int mid, from = 0, to = size - 1;
+        while (from <= to) {
+            mid = (from + to) >> 1;
+            if (areEqual(element, state.elements[mid])) {
+                return mid;
+            }
+            if (state.compare(element, state.elements[mid]) < 0) {
+                to = mid - 1;
+            } else {
+                from = mid + 1;
+            }
+        }
+        throw new NoSuchElementException();
+    }
 
-	private boolean binaryContains(final E element) {
-		try {
-			binarySearch(element);
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-		return true;
-	}
+    private boolean binaryContains(final E element) {
+        try {
+            binarySearch(element);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public void sort(final Comparator<E> comp) {
-		E[] elements = toArray();
-		(new Quicksort<>(comp)).sort(elements);
-		clear();
-		for (E element : elements) {
-			addLast(element);
-		}
-		state = new Snapshot<>(elements, comp);
-	}
+    @Override
+    public void sort(final Comparator<E> comp) {
+        E[] elements = toArray();
+        (new Quicksort<>(comp)).sort(elements);
+        clear();
+        for (E element : elements) {
+            addLast(element);
+        }
+        state = new Snapshot<>(elements, comp);
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (!(obj instanceof AbstractList)) {
-			return false;
-		}
-		AbstractList<?> list = (AbstractList<?>) obj;
-		Iterator<E> i = iterator();
-		Iterator<?> j = list.iterator();
-		while (i.hasNext() && j.hasNext()) {
-			if (!areEqual(i.next(), j.next())) {
-				return false;
-			}
-		}
-		return size() == list.size();
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof AbstractList)) {
+            return false;
+        }
+        AbstractList<?> list = (AbstractList<?>)obj;
+        Iterator<E> i = iterator();
+        Iterator<?> j = list.iterator();
+        while (i.hasNext() && j.hasNext()) {
+            if (!areEqual(i.next(), j.next())) {
+                return false;
+            }
+        }
+        return size() == list.size();
+    }
 
-	@Override
-	public int hashCode() {
-		int prime = 31, result = 1;
-		for (E element : this) {
-			result = prime * result + hash(element);
-		}
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int prime = 31, result = 1;
+        for (E element : this) {
+            result = prime * result + hash(element);
+        }
+        return result;
+    }
 
-	int validateIndex(final int index, final boolean isAddition) {
-		if (!isAddition && isEmpty()) {
-			throw new IllegalStateException();
-		}
-		int bound = isAddition ? size + 1 : size;
-		return Objects.checkIndex(index, bound);
-	}
+    int validateIndex(final int index, final boolean isAddition) {
+        if (!isAddition && isEmpty()) {
+            throw new IllegalStateException();
+        }
+        int bound = isAddition ? size + 1 : size;
+        return Objects.checkIndex(index, bound);
+    }
 
-	/**
-	 * Ensures that the specified {@code Position} is valid insofar as it belongs to this {@code AbstractCollection}.
-	 *
-	 * @param position the specified {@code Position}
-	 * @param type the expected type of the specified {@code Position}
-	 * @return the specified {@code Position} cast to the specified type of {@code AbstractPosition}
-	 * @throws IllegalArgumentException if the specified {@code Position} is not of the specified {@code type} or it is
-	 * not owned by this {@code AbstractCollection}
-	 * @throws IllegalStateException if this {@code AbstractCollection} is empty
-	 * @throws NullPointerException if the specified {@code Position} is {@code null}
-	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	AbstractPosition<E> validatePosition(Position<E> position, Class<? extends AbstractPosition> type) {
-		if (isEmpty()) {
-			throw new IllegalStateException();
-		}
-		AbstractPosition<E> abstractPosition;
-		if (!(type.isInstance(position)) || !(abstractPosition = type.cast(position)).isOwnedBy(this)) {
-			throw new IllegalArgumentException();
-		}
-		return abstractPosition;
-	}
+    /**
+     * Ensures that the specified {@code Position} is valid insofar as it belongs to this {@code AbstractCollection}.
+     *
+     * @param position the specified {@code Position}
+     * @param type the expected type of the specified {@code Position}
+     * @return the specified {@code Position} cast to the specified type of {@code AbstractPosition}
+     * @throws IllegalArgumentException if the specified {@code Position} is not of the specified {@code type} or it is
+     * not owned by this {@code AbstractCollection}
+     * @throws IllegalStateException if this {@code AbstractCollection} is empty
+     * @throws NullPointerException if the specified {@code Position} is {@code null}
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    AbstractPosition<E> validatePosition(Position<E> position, Class<? extends AbstractPosition> type) {
+        if (isEmpty()) {
+            throw new IllegalStateException();
+        }
+        AbstractPosition<E> abstractPosition;
+        if (!(type.isInstance(position)) || !(abstractPosition = type.cast(position)).isOwnedBy(this)) {
+            throw new IllegalArgumentException();
+        }
+        return abstractPosition;
+    }
 
-	private static final long serialVersionUID = -5752600475035029478L;
+    private static final long serialVersionUID = -5752600475035029478L;
 
-	private void writeObject(ObjectOutputStream stream) throws IOException {
-		stream.defaultWriteObject();
-		stream.writeInt(size);
-		for (E element : this) {
-			stream.writeObject(element);
-		}
-	}
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeInt(size);
+        for (E element : this) {
+            stream.writeObject(element);
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
-		stream.defaultReadObject();
-		size = validateSize(stream.readInt());
-		init();
-		for (int i = 0; i < size; i++) {
-			E element = (E) stream.readObject();
-			addLast(element);
-		}
-	}
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+        size = validateSize(stream.readInt());
+        init();
+        for (int i = 0; i < size; i++) {
+            E element = (E)stream.readObject();
+            addLast(element);
+        }
+    }
 
 }

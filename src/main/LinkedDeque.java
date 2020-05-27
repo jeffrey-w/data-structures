@@ -8,13 +8,13 @@ package main;
  */
 public class LinkedDeque<E> extends AbstractDeque<E> {
 
-	/**
-	 * Constructs a new {@code LinkedDeque} object.
-	 */
-	public LinkedDeque() {
-		data = new LinkedList<>();
-	}
+    /**
+     * Constructs a new {@code LinkedDeque} object.
+     */
+    public LinkedDeque() {
+        data = new LinkedList<>();
+    }
 
-	private static final long serialVersionUID = -8959455333267528865L;
+    private static final long serialVersionUID = -8959455333267528865L;
 
 }
