@@ -11,12 +11,12 @@ import java.util.Comparator;
  */
 public final class DefaultComparator<E> implements Comparator<E>, Serializable {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public int compare(E a, E b) {
-		return ((Comparable<E>) a).compareTo(b);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public int compare(E a, E b) {
+        return ((Comparable<E>)a).compareTo(b);
+    }
 
-	private static final long serialVersionUID = 6061609908437846539L;
+    private static final long serialVersionUID = 6061609908437846539L;
 
 }
