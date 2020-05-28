@@ -15,7 +15,7 @@ import static util.Common.*;
  */
 public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
 
-    Map<E, Void> map;
+    AbstractMap<E, Void> map;
 
     @Override
     public void clear() {
@@ -24,7 +24,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
 
     @Override
     protected void init() {
-        ((AbstractMap<E, Void>)map).init();
+        map.init();
     }
 
     @Override
@@ -97,7 +97,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         size = validateSize(stream.readInt());
-        map = (Map<E, Void>)validateObject(stream.readObject());
+        map = (AbstractMap<E, Void>)validateObject(stream.readObject());
     }
 
 }
