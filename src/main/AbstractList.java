@@ -135,6 +135,18 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         return result;
     }
 
+    /**
+     * Ensures that the specified {@code index} is valid insofar as it is on the interval between zero and the size
+     * of this {@code AbstractList}, which may be either open or closed at the end depending on the purpose for which
+     * the {@code index} is being validated.
+     *
+     * @param index the specified index
+     * @param isAddition if {@code true}, then the size of this {@code AbstractList} constitutes a valid index
+     * @return the specified {@code index} if it is valid
+     * @throws IllegalStateException if this {@code AbstractList} is empty and the specified {@code index} is not zero
+     * @throws IndexOutOfBoundsException if the specified {@code index} does not lie on the interval between zero and
+     * the size of this {@code AbstractList}
+     */
     int validateIndex(final int index, final boolean isAddition) {
         if (!isAddition && isEmpty()) {
             throw new IllegalStateException();
@@ -144,26 +156,22 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     }
 
     /**
-     * Ensures that the specified {@code Position} is valid insofar as it belongs to this {@code AbstractCollection}.
+     * Ensures that the specified {@code Position} is valid insofar as it belongs to this {@code AbstractList}.
      *
      * @param position the specified {@code Position}
-     * @param type the expected type of the specified {@code Position}
-     * @return the specified {@code Position} cast to the specified type of {@code AbstractPosition}
-     * @throws IllegalArgumentException if the specified {@code Position} is not of the specified {@code type} or it is
-     * not owned by this {@code AbstractCollection}
-     * @throws IllegalStateException if this {@code AbstractCollection} is empty
+     * @return the specified {@code Position} if it is valid
+     * @throws IllegalArgumentException if the specified {@code Position} is not owned by this {@code AbstractList}
+     * @throws IllegalStateException if this {@code AbstractList} is empty
      * @throws NullPointerException if the specified {@code Position} is {@code null}
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    AbstractPosition<E> validatePosition(Position<E> position, Class<? extends AbstractPosition> type) {
+    AbstractPosition<E> validatePosition(Position<E> position) {
         if (isEmpty()) {
             throw new IllegalStateException();
         }
-        AbstractPosition<E> abstractPosition;
-        if (!(type.isInstance(position)) || !(abstractPosition = type.cast(position)).isOwnedBy(this)) {
+        if (!(position instanceof AbstractPosition) || ((AbstractPosition<E>)position).owner != this) {
             throw new IllegalArgumentException();
         }
-        return abstractPosition;
+        return (AbstractPosition<E>) position;
     }
 
     private static final long serialVersionUID = -5752600475035029478L;
