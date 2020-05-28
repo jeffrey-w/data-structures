@@ -13,7 +13,7 @@ final class TestObject implements Cloneable, Comparable<TestObject>, Serializabl
         return new TestObject(RAND.nextInt());
     }
 
-    static TestObject random(int origin, int bound) {
+    static TestObject random(final int origin, final int bound) {
         return new TestObject(RAND.nextInt(origin, bound));
     }
 
