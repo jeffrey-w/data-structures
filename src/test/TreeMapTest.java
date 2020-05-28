@@ -118,6 +118,8 @@ class TreeMapTest {
         TestObject key = new TestObject(SIZE - 1);
         assertNull(empty.put(key, VALUE));
         assertEquals(VALUE, sequential.put(key, TestObject.random()));
+        sequential.put(key, TestObject.random());
+        assertEquals(SIZE, sequential.size());
     }
 
     @Test
@@ -125,6 +127,7 @@ class TreeMapTest {
         assertThrows(IllegalStateException.class, () -> empty.remove(null));
         assertThrows(NoSuchElementException.class, () -> sequential.remove(null));
         assertEquals(sequential.getLast().getValue(), sequential.remove(new TestObject(SIZE - 1)));
+        assertEquals(SIZE - 1, sequential.size());
         halve(random);
         removeRoot(random);
         assertTrue(treeHeight(random) <= expectedHeight(random));
