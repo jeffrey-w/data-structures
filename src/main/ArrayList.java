@@ -118,7 +118,7 @@ public class ArrayList<E> extends AbstractList<E> {
         if (size - index > 1) {
             System.arraycopy(elements, index + 1, elements, index, size - 1 - index);
         }
-        bucket.invalidate();
+        bucket.owner = null;
         trimToSize();
         state = null;
         return bucket.getElement();
@@ -166,7 +166,7 @@ public class ArrayList<E> extends AbstractList<E> {
     }
 
     private int toIndex(Position<E> position) {
-        validatePosition(position, Bucket.class);
+        validatePosition(position);
         for (int i = 0; i < size; i++) {
             if (elements[i] == position) {
                 return i;
