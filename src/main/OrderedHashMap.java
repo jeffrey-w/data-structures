@@ -25,7 +25,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
 
     private final static class LinkedHashMapEntry<K, V> extends AbstractEntry<K, V> {
 
-        public LinkedHashMapEntry(final K key, final V value) {
+        LinkedHashMapEntry(K key, V value) {
             super(key, value);
         }
 
@@ -55,7 +55,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public boolean contains(K key) {
+    public boolean contains(final K key) {
         return map.contains(key);
     }
 
@@ -70,13 +70,13 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public V put(K key, V value) {
+    public V put(final K key, final V value) {
         list.addLast(key);
         return map.put(key, value);
     }
 
     @Override
-    public V remove(K key) {
+    public V remove(final K key) {
         list.remove(list.indexOf(key));
         return map.remove(key);
     }
@@ -96,21 +96,21 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public Entry<K, V> removePrevious(K key) {
+    public Entry<K, V> removePrevious(final K key) {
         K prev = list.removePrevious(list.positionOf(key));
         V value = map.remove(prev);
         return new LinkedHashMapEntry<>(prev, value);
     }
 
     @Override
-    public Entry<K, V> removeNext(K key) {
+    public Entry<K, V> removeNext(final K key) {
         K next = list.removeNext(list.positionOf(key));
         V value = map.remove(next);
         return new LinkedHashMapEntry<>(next, value);
     }
 
     @Override
-    public V get(K key) {
+    public V get(final K key) {
         return map.get(key);
     }
 
@@ -129,14 +129,14 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public Entry<K, V> getPrevious(K key) {
+    public Entry<K, V> getPrevious(final K key) {
         K prev = list.getPrevious(list.positionOf(key));
         V value = map.get(prev);
         return new LinkedHashMapEntry<>(prev, value);
     }
 
     @Override
-    public Entry<K, V> getNext(K key) {
+    public Entry<K, V> getNext(final K key) {
         K next = list.getNext(list.positionOf(key));
         V value = map.get(next);
         return new LinkedHashMapEntry<>(next, value);
