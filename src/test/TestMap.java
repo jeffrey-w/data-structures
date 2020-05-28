@@ -9,18 +9,19 @@ import java.util.NoSuchElementException;
 import static test.TestUtils.SIZE;
 import static util.Common.areEqual;
 
-final class TestMap extends AbstractMap<Integer, TestObject> {
+final class TestMap extends AbstractMap<TestObject, TestObject> {
 
-    private static final class TestEntry extends AbstractEntry<Integer, TestObject> {
+    private static final class TestEntry extends AbstractEntry<TestObject, TestObject> {
 
-        public TestEntry(Integer key, TestObject value, TestMap owner) {
-            super(key, value, owner);
+        public TestEntry(TestObject key, TestObject value) {
+            super(key, value);
         }
 
     }
 
+    private static final TestObject nil = new TestObject(SIZE);
+
     private transient TestEntry[] map;
-    private transient boolean[] contains;
 
     TestMap() {
         init();
@@ -30,35 +31,34 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
     protected void init() {
         setSize(0);
         map = new TestEntry[SIZE];
-        contains = new boolean[SIZE];
     }
 
     @Override
-    public boolean contains(final Integer key) {
+    public boolean contains(final TestObject key) {
         try {
-            return contains[validateKey(key)];
-        } catch (RuntimeException e) {
+            return map[validateKey(key, false)] != null;
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
 
     @Override
-    public TestObject put(final Integer key, final TestObject value) {
-        validateKey(key);
-        TestObject result = contains[key] ? map[key].getValue() : null;
-        map[key] = new TestEntry(key, value, this);
-        contains[key] = true;
-        setSize(size() + 1);
+    public TestObject put(final TestObject key, final TestObject value) {
+        validateKey(key, false);
+        TestObject result = contains(key) ? map[key.getState()].getValue() : nil;
+        map[key.getState()] = new TestEntry(key, value);
+        if (result == nil) {
+            result = null;
+            setSize(size() + 1);
+        }
         return result;
     }
 
     @Override
-    public TestObject remove(final Integer key) {
-        validateKey(key);
-        TestObject result = map[key].getValue();
-        map[key].invalidate();
-        map[key] = null;
-        contains[key] = false;
+    public TestObject remove(final TestObject key) {
+        validateKey(key, true);
+        TestObject result = map[key.getState()].getValue();
+        map[key.getState()] = null;
         setSize(size() - 1);
         return result;
     }
@@ -74,23 +74,26 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
     }
 
     @Override
-    public TestObject get(final Integer key) {
-        return map[validateKey(key)].getValue();
+    public TestObject get(final TestObject key) {
+        return map[validateKey(key, true)].getValue();
     }
 
-    private Integer validateKey(Integer key) {
-        if (key < 0 || key + 1 > SIZE) {
-            throw new RuntimeException();
+    private int validateKey(TestObject key, boolean checkEmpty) {
+        if(checkEmpty && isEmpty()) {
+            throw new IllegalStateException();
         }
-        return key;
+        if(key == null || key.getState() < 0 || key.getState() > SIZE - 1) {
+            throw new NoSuchElementException();
+        }
+        return key.getState();
     }
 
-    Set<Entry<Integer, TestObject>> entries;
+    Set<Entry<TestObject, TestObject>> entries;
 
     @Override
-    public Set<Entry<Integer, TestObject>> entrySet() {
-        Set<Entry<Integer, TestObject>> entries = this.entries;
-        if (entries == null) {
+    public Set<Entry<TestObject, TestObject>> entrySet() {
+        Set<Entry<TestObject, TestObject>> entries = this.entries;
+        if(entries == null) {
             entries = new AbstractSet<>() {
 
                 @Override
@@ -99,8 +102,8 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
                 }
 
                 @Override
-                public boolean contains(final Entry<Integer, TestObject> entry) {
-                    if (TestMap.this.contains(entry.getKey())) {
+                public boolean contains(final Entry<TestObject, TestObject> entry) {
+                    if(TestMap.this.contains(entry.getKey())) {
                         return areEqual(get(entry.getKey()), entry.getValue());
                     }
                     return false;
@@ -112,26 +115,21 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
                 }
 
                 @Override
-                public boolean isEmpty() {
-                    return TestMap.this.isEmpty();
-                }
-
-                @Override
-                public void add(final Entry<Integer, TestObject> element) {
+                public void add(Entry<TestObject, TestObject> element) {
                     throw new UnsupportedOperationException();
                 }
 
                 @Override
-                public void remove(final Entry<Integer, TestObject> element) {
+                public void remove(Entry<TestObject, TestObject> element) {
                     throw new UnsupportedOperationException();
                 }
 
                 @Override
-                public Iterator<Entry<Integer, TestObject>> iterator() {
+                public Iterator<Entry<TestObject, TestObject>> iterator() {
                     return new EntryIter();
                 }
 
-                private static final long serialVersionUID = 4706430778067701683L;
+                private static final long serialVersionUID = 5208264548321051267L;
 
             };
             this.entries = entries;
@@ -139,16 +137,16 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
         return entries;
     }
 
-    private final class EntryIter implements Iterator<Entry<Integer, TestObject>> {
+    private final class EntryIter implements Iterator<Entry<TestObject, TestObject>> {
 
-        int last;
-        Queue<Entry<Integer, TestObject>> q;
+        TestObject last;
+        Queue<Entry<TestObject, TestObject>> q;
         boolean removable;
 
         EntryIter() {
             q = new LinkedQueue<>();
-            for (int i = 0; i < SIZE; i++) {
-                if (contains[i]) {
+            for(int i = 0; i < SIZE; i++) {
+                if(map[i] != null) {
                     q.enqueue(map[i]);
                 }
             }
@@ -160,8 +158,8 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
         }
 
         @Override
-        public Entry<Integer, TestObject> next() {
-            if (!hasNext()) {
+        public Entry<TestObject, TestObject> next() {
+            if(!hasNext()) {
                 throw new NoSuchElementException();
             }
             last = q.first().getKey();
@@ -171,15 +169,14 @@ final class TestMap extends AbstractMap<Integer, TestObject> {
 
         @Override
         public void remove() {
-            if (!removable) {
+            if(!removable) {
                 throw new IllegalStateException();
             }
             removable = false;
             TestMap.this.remove(last);
         }
-
     }
 
-    private static final long serialVersionUID = -4049372969033166420L;
+    private static final long serialVersionUID = -8425440739593113306L;
 
 }
