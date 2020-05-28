@@ -2,12 +2,17 @@ package main;
 
 import util.DefaultComparator;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static util.Common.validateObject;
+
 public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E> {
 
-    private final Comparator<E> comp;
+    private Comparator<E> comp;
 
     public PriorityQueue() {
         this(new DefaultComparator<>());
@@ -26,11 +31,9 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
 
     @Override
     public E dequeue() {
-        if (isEmpty()) {
-            throw new IllegalStateException();
-        }
         E result = data.getFirst();
         swap(0, size() - 1);
+        data.removeLast();
         downheap(0);
         return result;
     }
@@ -71,7 +74,7 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
     }
 
     private int parent(int index) {
-        return (index - 1) << 1;
+        return (index - 1) >>1;
     }
 
     private int left(int index) {
@@ -96,5 +99,16 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
     }
 
     private static final long serialVersionUID = -2669565621428618944L;
+
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeObject(comp);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        comp = (Comparator<E>)validateObject(stream.readObject());
+    }
 
 }
