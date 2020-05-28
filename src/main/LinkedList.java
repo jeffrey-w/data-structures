@@ -103,12 +103,12 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     @Override
-    public E removeBefore(final Position<E> position) {
+    public E removePrevious(final Position<E> position) {
         return unlink(validatePosition(position).prev);
     }
 
     @Override
-    public E removeAfter(final Position<E> position) {
+    public E removeNext(final Position<E> position) {
         return unlink(validatePosition(position).next);
     }
 
@@ -157,6 +157,11 @@ public class LinkedList<E> extends AbstractList<E> {
     private E setAt(Node<E> node, E element) {
         state = null;
         return node.setElement(element);
+    }
+
+    @Override
+    public Position<E> positionOf(final E element) {
+        return toNode(indexOf(element), false);
     }
 
     private Node<E> toNode(int index, boolean isAddition) {
