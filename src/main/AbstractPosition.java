@@ -1,14 +1,17 @@
 package main;
 
+import java.util.Objects;
+
 /**
  * The {@code AbstractPosition} class is the base class from which all {@code Collection} nodes shall be derived.
  *
  * @param <E> the type of element at this {@code AbstractPosition}
  * @author Jeff Wilgus
  */
-public abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>> implements Position<E> {
+public abstract class AbstractPosition<E> implements Position<E> {
 
     private E element;
+    Collection<E> owner;
 
     /**
      * Constructs a new {@code AbstractPosition} object that carries the specified {@code element} and belongs to the
@@ -19,8 +22,8 @@ public abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>>
      * @throws NullPointerException if the specified {@code Collection} is {@code null}
      */
     public AbstractPosition(final E element, final Collection<E> owner) {
-        super(owner);
         this.element = element;
+        this.owner = Objects.requireNonNull(owner);
     }
 
     @Override
@@ -39,4 +42,5 @@ public abstract class AbstractPosition<E> extends AbstractOwnable<Collection<E>>
         this.element = element;
         return result;
     }
+
 }
