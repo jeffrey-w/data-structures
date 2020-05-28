@@ -13,10 +13,12 @@ import static test.TestUtils.VALUE;
 
 class AbstractMapTest {
 
+    private static final TestObject KEY = new TestObject(0);
+
     private static TestMap copy(TestMap map) {
         TestMap copy = new TestMap();
-        for (Entry<Integer, TestObject> entry : map.entrySet()) {
-            copy.put(entry.getKey(), entry.getValue().clone());
+        for (Entry<TestObject, TestObject> entry : map.entrySet()) {
+            copy.put(entry.getKey().clone(), entry.getValue().clone());
         }
         return copy;
     }
@@ -28,7 +30,7 @@ class AbstractMapTest {
         empty = new TestMap();
         full = new TestMap();
         for (int i = 0; i < SIZE; i++) {
-            full.put(i, VALUE);
+            full.put(new TestObject(i), VALUE);
         }
     }
 
@@ -51,21 +53,21 @@ class AbstractMapTest {
 
     @Test
     void putIfAbsent() {
-        assertTrue(empty.putIfAbsent(0, VALUE));
-        assertFalse(empty.putIfAbsent(0, null));
+        assertTrue(empty.putIfAbsent(KEY, VALUE));
+        assertFalse(empty.putIfAbsent(KEY, VALUE));
     }
 
     @Test
     void removeIfPresent() {
-        assertTrue(full.removeIfPresent(0, VALUE));
-        assertFalse(full.removeIfPresent(0, VALUE));
+        assertTrue(full.removeIfPresent(KEY, VALUE));
+        assertFalse(full.removeIfPresent(KEY, VALUE));
     }
 
     @Test
     void replace() {
-        assertNull(empty.replace(0, null));
-        assertFalse(empty.contains(0));
-        assertEquals(VALUE, full.replace(0, null));
+        assertNull(empty.replace(KEY, null));
+        assertFalse(empty.contains(KEY));
+        assertEquals(VALUE, full.replace(KEY, null));
     }
 
     @Test
@@ -86,11 +88,10 @@ class AbstractMapTest {
 
     @Test
     void testToString() {
-        int index = 0;
         StringBuilder string = new StringBuilder("[");
         assertEquals("[]", empty.toString());
         for (int i = 0; i < SIZE; i++) {
-            string.append("{").append(i).append(" : ").append(full.get(i)).append("}");
+            string.append("{").append(i).append(" : ").append(full.get(new TestObject(i))).append("}");
             if (i < SIZE - 1) {
                 string.append(", ");
             }
@@ -101,7 +102,7 @@ class AbstractMapTest {
 
     @Test
     void keySet() {
-        Iterator<Integer> iterator = full.keySet().iterator();
+        Iterator<TestObject> iterator = full.keySet().iterator();
         while (iterator.hasNext()) {
             iterator.next();
             iterator.remove();
