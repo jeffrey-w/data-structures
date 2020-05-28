@@ -115,7 +115,7 @@ public class LinkedList<E> extends AbstractList<E> {
     private E unlink(Node<E> node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
-        node.invalidate();
+        node.owner = null;
         size--;
         return node.getElement();
     }
@@ -176,6 +176,10 @@ public class LinkedList<E> extends AbstractList<E> {
         return node;
     }
 
+    Node<E> validatePosition(Position<E> position) {
+        return (Node<E>)super.validatePosition(position);
+    }
+
     @Override
     public ListIterator<E> listIterator() {
         return new ListIter(0, head.next);
@@ -196,10 +200,6 @@ public class LinkedList<E> extends AbstractList<E> {
             current = current.next;
         }
         throw new IllegalArgumentException();
-    }
-
-    private Node<E> validatePosition(Position<E> position) {
-        return (Node<E>)validatePosition(position, Node.class);
     }
 
     @Override
