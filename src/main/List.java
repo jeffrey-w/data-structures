@@ -98,7 +98,7 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      * @throws IllegalStateException if this {@code List} is empty
      * @throws NullPointerException if the specified {@code Position} is {@code null}
      */
-    E removeBefore(final Position<E> position);
+    E removePrevious(final Position<E> position);
 
     /**
      * Removes the element in this {@code List} at the {@code Position} after that specified.
@@ -109,7 +109,7 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      * @throws IllegalStateException if this {@code List} is empty
      * @throws NullPointerException if the specified {@code Position} is {@code null}
      */
-    E removeAfter(final Position<E> position);
+    E removeNext(final Position<E> position);
 
     /**
      * Retrieves the element at the specified {@code index} of this {@code List}.
@@ -180,6 +180,15 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      * @throws NoSuchElementException if the specified {@code element} is not in this {@code List}
      */
     int indexOf(final E element);
+
+    /**
+     * Provides the {@code Position} of the specified {@code element} in this {@code List}.
+     *
+     * @param element the specified element
+     * @return the {@code Position} of the specified {@code element}
+     * @throws NoSuchElementException if the specified {@code element} is not in this {@code List}
+     */
+    Position<E> positionOf(final E element);
 
     /**
      * Provides a {@code ListIterator} over the elements in this {@code List}.
