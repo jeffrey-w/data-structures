@@ -23,8 +23,8 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
     private static class Bucket<K, V> extends AbstractEntry<K, V> {
 
-        Bucket(K key, V value, HashMap<K, V> owner) {
-            super(key, value, owner);
+        Bucket(K key, V value) {
+            super(key, value);
         }
 
     }
@@ -40,19 +40,18 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
             throw new NoSuchElementException();
         }
 
-        V insert(K key, V value, HashMap<K, V> owner) {
+        Object insert(K key, V value) {
             for (Bucket<K, V> bucket : this) {
                 if (areEqual(key, bucket.getKey())) {
                     return bucket.setValue(value);
                 }
             }
-            addLast(new Bucket<>(key, value, owner));
-            return null;
+            addLast(new Bucket<>(key, value));
+            return NIL;
         }
 
         V remove(K key) {
             Bucket<K, V> bucket = remove(indexOf(getBucket(key)));
-            bucket.invalidate();
             return bucket.getValue();
         }
 
@@ -61,6 +60,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
     }
 
     private static final double DEFAULT_LOAD_FACTOR = 0.75;
+    private static final Object NIL = new Object();
 
     private static double validateLoadFactor(double loadFactor) {
         if (lessThanOrEqual(loadFactor, 0) || lessThanOrEqual(1, loadFactor)) {
@@ -109,7 +109,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
     @Override
     public boolean contains(final K key) {
         try {
-            chainAt(key).getBucket(key);
+            chainAt(key, false).getBucket(key);
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -119,8 +119,13 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V put(final K key, final V value) {
         ensureCapacity();
-        size++;
-        return chainAt(key).insert(key, value, this);
+        @SuppressWarnings("unchecked")
+        V result = (V)chainAt(key, false).insert(key, value);
+        if (result == NIL) {
+            result = null;
+            size++;
+        }
+        return result;
     }
 
     private void ensureCapacity() {
@@ -137,7 +142,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
                     Chain<K, V> chain = (Chain<K, V>)o;
                     for (Bucket<K, V> bucket : chain) {
                         size++;
-                        chainAt(bucket.getKey()).insert(bucket.getKey(), bucket.getValue(), this);
+                        chainAt(bucket.getKey(), false).insert(bucket.getKey(), bucket.getValue());
                     }
                 }
             }
@@ -146,19 +151,19 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public V remove(final K key) {
-        V value = chainAt(key).remove(key);
+        V value = chainAt(key, true).remove(key);
         size--;
         return value;
     }
 
     @Override
     public V get(final K key) {
-        return chainAt(key).getBucket(key).getValue();
+        return chainAt(key, true).getBucket(key).getValue();
     }
 
     @SuppressWarnings("unchecked")
-    private Chain<K, V> chainAt(K key) {
-        if (isEmpty()) {
+    private Chain<K, V> chainAt(K key, boolean checkEmpty) {
+        if (checkEmpty && isEmpty()) {
             throw new IllegalStateException();
         }
         int index = compress(hash(key));
