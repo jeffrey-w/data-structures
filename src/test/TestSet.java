@@ -4,7 +4,7 @@ import main.AbstractSet;
 
 import java.lang.reflect.Field;
 
-final class TestSet extends AbstractSet<Integer> {
+final class TestSet extends AbstractSet<TestObject> {
 
     TestSet() {
         try {
