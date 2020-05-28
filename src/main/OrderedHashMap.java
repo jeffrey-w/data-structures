@@ -144,7 +144,8 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
 
     /**
      * Sorts the entries in this {@code OrderedHashMap} on the order induced by the specified {@code Comparator}, or,
-     * if that is {@code null}, their natural ordering.
+     * if that is {@code null}, their natural ordering. Iteration over this {@code OrderedHashMap} will follow the
+     * induced order rather than insertion order afterwards.
      *
      * @param comp the specified {@code Comparator}
      * @throws ClassCastException if the keys in this {@code OrderedHashMap} are not mutually comparable
