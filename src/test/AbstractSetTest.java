@@ -13,7 +13,7 @@ class AbstractSetTest {
 
     private static TestSet copy(TestSet set) {
         TestSet copy = new TestSet();
-        for(TestObject obj : set) {
+        for (TestObject obj : set) {
             copy.add(obj.clone());
         }
         return copy;

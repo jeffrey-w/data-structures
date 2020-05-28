@@ -171,7 +171,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         if (!(position instanceof AbstractPosition) || ((AbstractPosition<E>)position).owner != this) {
             throw new IllegalArgumentException();
         }
-        return (AbstractPosition<E>) position;
+        return (AbstractPosition<E>)position;
     }
 
     private static final long serialVersionUID = -5752600475035029478L;

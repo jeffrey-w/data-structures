@@ -79,10 +79,10 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
     }
 
     private int validateKey(TestObject key, boolean checkEmpty) {
-        if(checkEmpty && isEmpty()) {
+        if (checkEmpty && isEmpty()) {
             throw new IllegalStateException();
         }
-        if(key == null || key.getState() < 0 || key.getState() > SIZE - 1) {
+        if (key == null || key.getState() < 0 || key.getState() > SIZE - 1) {
             throw new NoSuchElementException();
         }
         return key.getState();
@@ -93,7 +93,7 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
     @Override
     public Set<Entry<TestObject, TestObject>> entrySet() {
         Set<Entry<TestObject, TestObject>> entries = this.entries;
-        if(entries == null) {
+        if (entries == null) {
             entries = new AbstractSet<>() {
 
                 @Override
@@ -103,7 +103,7 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
 
                 @Override
                 public boolean contains(final Entry<TestObject, TestObject> entry) {
-                    if(TestMap.this.contains(entry.getKey())) {
+                    if (TestMap.this.contains(entry.getKey())) {
                         return areEqual(get(entry.getKey()), entry.getValue());
                     }
                     return false;
@@ -145,8 +145,8 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
 
         EntryIter() {
             q = new LinkedQueue<>();
-            for(int i = 0; i < SIZE; i++) {
-                if(map[i] != null) {
+            for (int i = 0; i < SIZE; i++) {
+                if (map[i] != null) {
                     q.enqueue(map[i]);
                 }
             }
@@ -159,7 +159,7 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
 
         @Override
         public Entry<TestObject, TestObject> next() {
-            if(!hasNext()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             last = q.first().getKey();
@@ -169,7 +169,7 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
 
         @Override
         public void remove() {
-            if(!removable) {
+            if (!removable) {
                 throw new IllegalStateException();
             }
             removable = false;
