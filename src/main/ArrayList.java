@@ -104,12 +104,12 @@ public class ArrayList<E> extends AbstractList<E> {
     }
 
     @Override
-    public E removeBefore(final Position<E> position) {
+    public E removePrevious(final Position<E> position) {
         return delete(toIndex(position) - 1);
     }
 
     @Override
-    public E removeAfter(final Position<E> position) {
+    public E removeNext(final Position<E> position) {
         return delete(toIndex(position) + 1);
     }
 
@@ -163,6 +163,11 @@ public class ArrayList<E> extends AbstractList<E> {
     public E set(final int index, final E element) {
         state = null;
         return bucketAt(index).setElement(element);
+    }
+
+    @Override
+    public Position<E> positionOf(final E element) {
+        return bucketAt(indexOf(element));
     }
 
     private int toIndex(Position<E> position) {
