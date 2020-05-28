@@ -41,7 +41,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         boolean color;
 
         Node(K key, V value, TreeMap<K, V> owner) {
-            super(key, value, owner);
+            super(key, value);
         }
 
     }
@@ -225,7 +225,6 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         if (original == BLACK) {
             deleteFixup(x);
         }
-        z.invalidate();
         size--;
         return z;
     }
@@ -422,7 +421,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         return y;
     }
 
-    private void ensureNonEmpty() {
+    private void ensureNonEmpty() { // TODO achieve this more elegantly
         if (isEmpty()) {
             throw new IllegalStateException();
         }
