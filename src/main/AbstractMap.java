@@ -87,7 +87,10 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
         int index = 0;
         StringBuilder builder = new StringBuilder("[");
         for (Entry<K, V> entry : entrySet()) {
-            builder.append(entry);
+            K key = entry.getKey();
+            V value = entry.getValue();
+            builder.append("{").append(key == this ? "(this map)" : key).append(" : ")
+                   .append(value == this ? "(this map)" : value).append("}");
             if (++index < size) {
                 builder.append(", ");
             }
