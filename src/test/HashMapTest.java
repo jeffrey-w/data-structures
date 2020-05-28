@@ -42,6 +42,8 @@ class HashMapTest {
         TestObject key = new TestObject(SIZE - 1);
         assertNull(empty.put(key, TestObject.random()));
         assertEquals(VALUE, full.put(key, TestObject.random()));
+        full.put(key, TestObject.random());
+        assertEquals(SIZE, full.size());
     }
 
     @Test
@@ -49,6 +51,7 @@ class HashMapTest {
         assertThrows(IllegalStateException.class, () -> empty.remove(null));
         assertThrows(NoSuchElementException.class, () -> full.remove(null));
         assertEquals(VALUE, full.remove(new TestObject(SIZE - 1)));
+        assertEquals(SIZE - 1, full.size());
     }
 
     @Test
