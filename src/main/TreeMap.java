@@ -26,8 +26,8 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
     private static final class Node<K, V> extends AbstractEntry<K, V> {
 
-        static <K, V> Node<K, V> nil(TreeMap<K, V> owner) {
-            Node<K, V> nil = new Node<>(null, null, owner);
+        static <K, V> Node<K, V> nil() {
+            Node<K, V> nil = new Node<>(null, null);
             nil.parent = nil;
             nil.left = nil;
             nil.right = nil;
@@ -40,7 +40,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         Node<K, V> right;
         boolean color;
 
-        Node(K key, V value, TreeMap<K, V> owner) {
+        Node(K key, V value) {
             super(key, value);
         }
 
@@ -73,7 +73,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
     @Override
     protected void init() {
         size = 0;
-        nil = Node.nil(this);
+        nil = Node.nil();
         root = nil;
     }
 
@@ -93,7 +93,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
     @Override
     public V put(final K key, final V value) {
-        Node<K, V> z = new Node<>(key, value, this);
+        Node<K, V> z = new Node<>(key, value);
         Node<K, V> y = nil, x = root;
         K cmp;
         while (x != nil) {
