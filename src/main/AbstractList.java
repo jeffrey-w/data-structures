@@ -187,11 +187,10 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
-        size = validateSize(stream.readInt());
+        int size = validateSize(stream.readInt());
         init();
         for (int i = 0; i < size; i++) {
-            E element = (E)stream.readObject();
-            addLast(element);
+            addLast((E)stream.readObject());
         }
     }
 
