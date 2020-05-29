@@ -60,24 +60,16 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public int size() {
-        return map.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
     public V put(final K key, final V value) {
         list.addLast(key);
+        size = list.size;
         return map.put(key, value);
     }
 
     @Override
     public V remove(final K key) {
         list.remove(list.indexOf(key));
+        size = list.size;
         return map.remove(key);
     }
 
