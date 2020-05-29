@@ -23,8 +23,8 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
     private static final class Snapshot<E> {
 
-        E[] elements;
-        Comparator<E> comp;
+        final E[] elements;
+        final Comparator<E> comp;
 
         Snapshot(E[] elements, Comparator<E> comp) {
             this.elements = elements;
