@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import static util.Common.RAND;
 
@@ -20,11 +21,7 @@ public final class Quicksort<E> {
      * specified {@code Comparator}, or , if that is {@code null}, their natural ordering.
      */
     public Quicksort(final Comparator<E> comp) {
-        if (comp == null) {
-            this.comp = new DefaultComparator<>();
-        } else {
-            this.comp = comp;
-        }
+        this.comp = Objects.requireNonNullElseGet(comp, DefaultComparator::new);
     }
 
     /**
