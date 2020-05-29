@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static util.Common.validateObject;
 
-public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E> {
+public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>, Sortable<E> {
 
     private Comparator<E> comp;
 
@@ -18,7 +18,7 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
         this(new DefaultComparator<>());
     }
 
-    public PriorityQueue(Comparator<E> comp) {
+    public PriorityQueue(final Comparator<E> comp) {
         data = new ArrayList<>();
         this.comp = Objects.requireNonNull(comp);
     }
@@ -26,7 +26,7 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
     @Override
     public void enqueue(final E element) {
         data.addLast(element);
-        upheap(size() - 1);
+        upheap();
     }
 
     @Override
@@ -34,11 +34,12 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
         E result = data.getFirst();
         swap(0, size() - 1);
         data.removeLast();
-        downheap(0);
+        downheap();
         return result;
     }
 
-    private void upheap(int index) {
+    private void upheap() {
+        int index = size() - 1;
         while (index > 0) {
             int parent = parent(index);
             if (comp.compare(data.get(index), data.get((parent))) > -1) {
@@ -49,7 +50,8 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
         }
     }
 
-    private void downheap(int index) {
+    private void downheap() {
+        int index = 0;
         while (hasLeft(index)) {
             int left, small;
             left = small = left(index);
@@ -74,7 +76,7 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
     }
 
     private int parent(int index) {
-        return (index - 1) >>1;
+        return (index - 1) >> 1;
     }
 
     private int left(int index) {
@@ -96,6 +98,12 @@ public class PriorityQueue<E> extends AbstractListAdaptor<E> implements Queue<E>
     @Override
     public E first() {
         return data.getFirst();
+    }
+
+    @Override
+    public void sort(final Comparator<E> comp) {
+        data.sort(comp);
+        this.comp = comp;
     }
 
     private static final long serialVersionUID = -2669565621428618944L;
