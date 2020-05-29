@@ -16,7 +16,7 @@ import static util.Common.validateObject;
  */
 public abstract class AbstractListAdaptor<E> implements Collection<E>, Serializable {
 
-    List<E> data;
+    AbstractList<E> data;
 
     @Override
     public void clear() {
@@ -63,7 +63,7 @@ public abstract class AbstractListAdaptor<E> implements Collection<E>, Serializa
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        data = (List<E>)validateObject(stream.readObject());
+        data = (AbstractList<E>)validateObject(stream.readObject());
     }
 
 }
