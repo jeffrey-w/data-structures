@@ -140,7 +140,7 @@ final class TestMap extends AbstractMap<TestObject, TestObject> {
     private final class EntryIter implements Iterator<Entry<TestObject, TestObject>> {
 
         TestObject last;
-        Queue<Entry<TestObject, TestObject>> q;
+        final Queue<Entry<TestObject, TestObject>> q;
         boolean removable;
 
         EntryIter() {
