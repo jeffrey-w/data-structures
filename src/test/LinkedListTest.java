@@ -15,7 +15,7 @@ class LinkedListTest {
     void setUp() {
         empty = new LinkedList<>();
         full = new LinkedList<>();
-        for(int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < SIZE; i++) {
             full.add(i, new TestObject(i));
         }
     }
@@ -108,4 +108,5 @@ class LinkedListTest {
     @Test
     void iterator() {
     }
+
 }
