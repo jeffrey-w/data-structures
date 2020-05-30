@@ -78,18 +78,17 @@ class AbstractSetTest {
 
     @Test
     void testEquals() {
-        assertEquals(full, full);
         assertNotEquals(full, null);
         assertNotEquals(full, new Object());
         assertNotEquals(full, empty);
-        TestSet copy = copy(full);
-        assertEquals(full, copy);
+        assertEquals(full, full);
+        assertEquals(full, copy(full));
     }
 
     @Test
     void testHashCode() {
-        assertNotEquals(empty.hashCode(), full.hashCode());
-        assertEquals(copy(full).hashCode(), full.hashCode());
+        assertNotEquals(full.hashCode(), empty.hashCode());
+        assertEquals(full.hashCode(), copy(full).hashCode());
     }
 
 }
