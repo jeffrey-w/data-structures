@@ -28,6 +28,7 @@ public class LinkedList<E> extends AbstractList<E> {
             this.prev = prev;
             this.next = next;
         }
+
     }
 
     private transient Node<E> head;
@@ -295,6 +296,7 @@ public class LinkedList<E> extends AbstractList<E> {
             added = true;
             addBefore(current, e);
         }
+
     }
 
     private final class Iter implements Iterator<E> {
@@ -326,6 +328,7 @@ public class LinkedList<E> extends AbstractList<E> {
             current = current.prev;
             unlink(current.next);
         }
+
     }
 
     private static final long serialVersionUID = -9146421135119588071L;

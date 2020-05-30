@@ -23,6 +23,7 @@ public class ArrayList<E> extends AbstractList<E> {
         Bucket(E element, final ArrayList<E> owner) {
             super(element, owner);
         }
+
     }
 
     private transient Object[] elements;
@@ -277,6 +278,7 @@ public class ArrayList<E> extends AbstractList<E> {
             added = true;
             ArrayList.this.add(next - 1, e);
         }
+
     }
 
     private final class Iter implements Iterator<E> {
@@ -306,6 +308,7 @@ public class ArrayList<E> extends AbstractList<E> {
             removable = false;
             delete(current - 1);
         }
+
     }
 
     private static final long serialVersionUID = 3193156208696397457L;
