@@ -17,17 +17,6 @@ import static util.Common.RAND;
 @TestMethodOrder(OrderAnnotation.class)
 class TreeMapTest {
 
-    private static boolean isSorted(TreeMap<TestObject, TestObject> map) {
-        TestObject last = null;
-        for (TestObject key : map.keySet()) {
-            if (last != null && last.compareTo(key) > 0) {
-                return false;
-            }
-            last = key;
-        }
-        return true;
-    }
-
     private static int treeHeight(TreeMap<TestObject, TestObject> map) {
         return heightOf(getNodeOf(map, "root"), getNodeOf(map, "nil"));
     }
@@ -101,7 +90,7 @@ class TreeMapTest {
             sequential.put(new TestObject(i), VALUE);
             random.put(TestObject.random(), VALUE);
         }
-        assertTrue(isSorted(random));
+        assertTrue(isSorted(random.keySet(), null));
         assertTrue(treeHeight(random) <= expectedHeight(random));
     }
 
