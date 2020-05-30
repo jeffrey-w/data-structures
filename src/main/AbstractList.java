@@ -54,6 +54,9 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
     @Override
     public int indexOf(final E element) {
+        if (isEmpty()) {
+            throw new IllegalStateException();
+        }
         if (isSorted()) {
             return binarySearch(element);
         }
