@@ -126,7 +126,7 @@ public class PriorityQueue<E> extends AbstractQueue<E> implements Sortable<E> {
     public void sort(final Comparator<E> comp) {
         E[] elements = data.toArray();
         this.comp = Objects.requireNonNullElseGet(comp, DefaultComparator::new);
-        data.init();
+        data.clear();
         for (E element : elements) {
             enqueue(element);
         }
