@@ -51,8 +51,7 @@ public class HashMap<K, V> extends AbstractMap<K, V> {
         }
 
         V remove(K key) {
-            Bucket<K, V> bucket = remove(indexOf(getBucket(key)));
-            return bucket.getValue();
+            return remove(indexOf(getBucket(key))).getValue();
         }
 
         private static final long serialVersionUID = -7957845362854571964L;
