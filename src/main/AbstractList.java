@@ -1,7 +1,6 @@
 package main;
 
-import util.DefaultComparator;
-import util.Quicksort;
+import util.AbstractSort;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,27 +20,11 @@ import static util.Common.*;
  */
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
-    private static final class Snapshot<E> {
-
-        final E[] elements;
-        final Comparator<E> comp;
-
-        Snapshot(E[] elements, Comparator<E> comp) {
-            this.elements = elements;
-            this.comp = comp == null ? new DefaultComparator<>() : comp;
-        }
-
-        int compare(E a, E b) {
-            return comp.compare(a, b);
-        }
-
-    }
-
-    transient Snapshot<E> state;
+    transient AbstractSort<E> sort;
 
     @Override
     public boolean contains(final E element) {
-        if (isSorted()) {
+        if (sort.isSorted()) {
             return binaryContains(element);
         }
         for (E e : this) {
@@ -52,13 +35,22 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         return false;
     }
 
+    private boolean binaryContains(final E element) {
+        try {
+            sort.binarySearch(element);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public int indexOf(final E element) {
         if (isEmpty()) {
             throw new IllegalStateException();
         }
-        if (isSorted()) {
-            return binarySearch(element);
+        if (sort.isSorted()) {
+            return sort.binarySearch(element);
         }
         int index = 0;
         for (E e : this) {
@@ -70,44 +62,14 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         throw new NoSuchElementException();
     }
 
-    private boolean isSorted() {
-        return state != null;
-    }
-
-    private int binarySearch(final E element) {
-        int mid, from = 0, to = size - 1;
-        while (from <= to) {
-            mid = (from + to) >> 1;
-            if (areEqual(element, state.elements[mid])) {
-                return mid;
-            }
-            if (state.compare(element, state.elements[mid]) < 0) {
-                to = mid - 1;
-            } else {
-                from = mid + 1;
-            }
-        }
-        throw new NoSuchElementException();
-    }
-
-    private boolean binaryContains(final E element) {
-        try {
-            binarySearch(element);
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public void sort(final Comparator<E> comp) {
         E[] elements = toArray();
-        (new Quicksort<>(comp)).sort(elements);
+        sort.sort(elements, comp);
         clear();
-        for (E element : elements) {
+        for(E element : elements) {
             addLast(element);
         }
-        state = new Snapshot<>(elements, comp);
     }
 
     @Override
