@@ -1,5 +1,7 @@
 package main;
 
+import util.Quicksort;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -38,7 +40,7 @@ public class ArrayList<E> extends AbstractList<E> {
     @Override
     protected void init() {
         size = 0;
-        state = null;
+        sort = new Quicksort<>();
         elements = new Object[DEFAULT_CAPACITY];
     }
 
@@ -76,7 +78,7 @@ public class ArrayList<E> extends AbstractList<E> {
         }
         elements[index] = bucket;
         size++;
-        state = null;
+        sort.clear();
         return bucket;
     }
 
@@ -121,7 +123,6 @@ public class ArrayList<E> extends AbstractList<E> {
         }
         bucket.owner = null;
         trimToSize();
-        state = null;
         return bucket.getElement();
     }
 
@@ -162,7 +163,7 @@ public class ArrayList<E> extends AbstractList<E> {
 
     @Override
     public E set(final int index, final E element) {
-        state = null;
+        sort.clear();
         return bucketAt(index).setElement(element);
     }
 

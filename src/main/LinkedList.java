@@ -1,5 +1,7 @@
 package main;
 
+import util.Quicksort;
+
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -44,7 +46,7 @@ public class LinkedList<E> extends AbstractList<E> {
     @Override
     protected void init() {
         size = 0;
-        state = null;
+        sort = new Quicksort<>();
         head = Node.emptyNode(this);
         tail = Node.emptyNode(this);
         head.next = tail;
@@ -84,7 +86,7 @@ public class LinkedList<E> extends AbstractList<E> {
         prev.next = node;
         next.prev = node;
         size++;
-        state = null;
+        sort.clear();
         return node;
     }
 
@@ -156,7 +158,7 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     private E setAt(Node<E> node, E element) {
-        state = null;
+        sort.clear();
         return node.setElement(element);
     }
 
