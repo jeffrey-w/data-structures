@@ -1,7 +1,6 @@
 package util;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 import static util.Common.RAND;
 
@@ -12,49 +11,43 @@ import static util.Common.RAND;
  * @param <E> the type of element being sorted.
  * @author Jeff Wilgus
  */
-public final class Quicksort<E> {
-
-    private final Comparator<E> comp;
+public final class Quicksort<E> extends AbstractSort<E> {
 
     /**
-     * Constructs a new QuickSort object that compares the elements of a supplied array on the order induced by the
-     * specified {@code Comparator}, or , if that is {@code null}, their natural ordering.
-     */
-    public Quicksort(final Comparator<E> comp) {
-        this.comp = Objects.requireNonNullElseGet(comp, DefaultComparator::new);
-    }
-
-    /**
-     * Sorts the specified {@code array} on the order induced by the {@code Comparator} supplied at construction,
-     * or, if that was {@code null}, the natural ordering of the elements in the specified {@code array}.
+     * Sorts the specified {@code elements} on the order induced by the specified {@code Comparator}, or, if that is
+     * {@code null}, the natural ordering of the specified {@code elements}.
      *
-     * @param array the specified array
-     * @throws ClassCastException if the specified {@code array} contains elements that are not mutually comparable by
-     * the supplied {@code Comparator}
-     * @throws NullPointerException if the specified {@code array} is {@code null}
+     * @param elements the specified elements
+     * @param comp the specified {@code Comparator}
+     * @throws ClassCastException if the specified {@code elements} contains elements that are not mutually
+     * comparable by the specified {@code Comparator}
+     * @throws NullPointerException if the specified {@code elements} are {@code null}
      */
-    public void sort(E[] array) {
-        sort(array, 0, array.length - 1);
+    @Override
+    public void sort(E[] elements, final Comparator<E> comp) {
+        setElements(elements);
+        setComp(comp);
+        sort(0, elements.length - 1);
     }
 
-    private void sort(E[] array, int from, int to) {
+    private void sort(int from, int to) {
         if (from < to) {
-            int p = partition(array, from, to);
-            sort(array, from, p - 1);
-            sort(array, p + 1, to);
+            int p = partition(from, to);
+            sort(from, p - 1);
+            sort(p + 1, to);
         }
     }
 
-    private int partition(E[] array, int from, int to) {
+    private int partition(int from, int to) {
         int index = randomIndex(from, to);
         int mid = from;
-        swap(array, index, to);
+        swap(index, to);
         for (int i = from; i < to; i++) {
-            if (lessThan(array[i], array[to])) {
-                swap(array, mid++, i);
+            if (lessThan(elements[i], elements[to])) {
+                swap(mid++, i);
             }
         }
-        swap(array, mid, to);
+        swap(mid, to);
         return mid;
     }
 
@@ -62,10 +55,10 @@ public final class Quicksort<E> {
         return RAND.nextInt(origin, bound + 1);
     }
 
-    private void swap(E[] arr, int a, int b) {
-        E temp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = temp;
+    private void swap(int a, int b) {
+        E temp = elements[a];
+        elements[a] = elements[b];
+        elements[b] = temp;
     }
 
     private boolean lessThan(E a, E b) {
