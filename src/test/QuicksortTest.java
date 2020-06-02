@@ -1,6 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.Test;
+import util.DefaultComparator;
 import util.Quicksort;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,8 +18,8 @@ class QuicksortTest {
                 objects[i] = TestObject.random();
             }
         } while (isSorted(objects, null));
-        Quicksort<TestObject> qs = new Quicksort<>(null);
-        qs.sort(objects);
+        Quicksort<TestObject> qs = new Quicksort<>();
+        qs.sort(objects, new DefaultComparator<>());
         assertTrue(isSorted(objects, null));
     }
 }

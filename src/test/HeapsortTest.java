@@ -1,6 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.Test;
+import util.DefaultComparator;
 import util.Heapsort;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,8 +18,8 @@ class HeapsortTest {
                 objects[i] = TestObject.random();
             }
         } while (isSorted(objects, null));
-        Heapsort<TestObject> hs = new Heapsort<>(null);
-        hs.sort(objects);
+        Heapsort<TestObject> hs = new Heapsort<>();
+        hs.sort(objects, new DefaultComparator<>());
         assertTrue(isSorted(objects, null));
     }
 
