@@ -166,6 +166,7 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      * @param index the specified index
      * @param element the specified element
      * @return the replaced element
+     * @throws IllegalStateException if this {@code List} is empty
      * @throws IndexOutOfBoundsException if the specified {@code index} is negative or greater than or equal to the
      * size of this {@code List}
      */
