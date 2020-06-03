@@ -13,16 +13,6 @@ import static util.Common.RAND;
  */
 public final class Quicksort<E> extends AbstractSort<E> {
 
-    /**
-     * Sorts the specified {@code elements} on the order induced by the specified {@code Comparator}, or, if that is
-     * {@code null}, the natural ordering of the specified {@code elements}.
-     *
-     * @param elements the specified elements
-     * @param comp the specified {@code Comparator}
-     * @throws ClassCastException if the specified {@code elements} contains elements that are not mutually
-     * comparable by the specified {@code Comparator}
-     * @throws NullPointerException if the specified {@code elements} are {@code null}
-     */
     @Override
     public void sort(E[] elements, final Comparator<E> comp) {
         setElements(elements);
