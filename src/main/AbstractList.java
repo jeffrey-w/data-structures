@@ -133,6 +133,9 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         if (isEmpty()) {
             throw new IllegalStateException();
         }
+        if(position == null) {
+            throw new NullPointerException();
+        }
         if (!(position instanceof AbstractPosition) || ((AbstractPosition<E>)position).owner != this) {
             throw new IllegalArgumentException();
         }
