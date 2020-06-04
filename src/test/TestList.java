@@ -1,6 +1,8 @@
 package test;
 
 import main.*;
+import util.AbstractSort;
+import util.Quicksort;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,27 +31,10 @@ public class TestList extends AbstractList<TestObject> {
     protected void init() {
         setSize(0);
         list = new ArrayList<>();
-    }
-
-    private void setSize(int size) {
         try {
-            Field s = AbstractCollection.class.getDeclaredField("size");
-            s.setAccessible(true);
-            s.set(this, size);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            getSort().set(this, new Quicksort<>());
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
-        }
-    }
-
-    private TestPosition validatePosition(Position<TestObject> position) {
-        try {
-            Method validate = AbstractList.class.getDeclaredMethod("validatePosition", Position.class);
-            validate.setAccessible(true);
-            validate.invoke(this, position);
-            return (TestPosition)position;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            throw new AssertionError();
         }
     }
 
@@ -58,6 +43,7 @@ public class TestList extends AbstractList<TestObject> {
         TestPosition position = new TestPosition(element, this);
         list.add(index, position);
         setSize(list.size());
+        clearSort();
         return position;
     }
 
@@ -66,6 +52,7 @@ public class TestList extends AbstractList<TestObject> {
         TestPosition position = new TestPosition(element, this);
         list.add(0, position);
         setSize(list.size());
+        clearSort();
         return position;
     }
 
@@ -74,6 +61,7 @@ public class TestList extends AbstractList<TestObject> {
         TestPosition position = new TestPosition(element, this);
         list.add(list.size(), position);
         setSize(list.size());
+        clearSort();
         return position;
     }
 
@@ -90,6 +78,7 @@ public class TestList extends AbstractList<TestObject> {
         TestPosition testPosition = new TestPosition(element, this);
         list.add(list.indexOf(validatePosition(position)) + 1, testPosition);
         setSize(list.size());
+        clearSort();
         return testPosition;
     }
 
@@ -130,12 +119,16 @@ public class TestList extends AbstractList<TestObject> {
 
     @Override
     public TestObject get(final int index) {
-        return list.get(index).getElement();
+        TestObject result = list.get(index).getElement();
+        clearSort();
+        return result;
     }
 
     @Override
     public TestObject getFirst() {
-        return list.get(0).getElement();
+        TestObject result = list.get(0).getElement();
+        clearSort();
+        return result;
     }
 
     @Override
@@ -145,22 +138,70 @@ public class TestList extends AbstractList<TestObject> {
 
     @Override
     public TestObject getPrevious(final Position<TestObject> position) {
-        return list.get(list.indexOf(validatePosition(position)) - 1).getElement();
+        TestObject result = list.get(list.indexOf(validatePosition(position)) - 1).getElement();
+        clearSort();
+        return result;
     }
 
     @Override
     public TestObject getNext(final Position<TestObject> position) {
-        return list.get(list.indexOf(validatePosition(position)) + 1).getElement();
+        TestObject result = list.get(list.indexOf(validatePosition(position)) + 1).getElement();
+        clearSort();
+        return result;
     }
 
     @Override
     public TestObject set(final int index, final TestObject element) {
-        return list.set(index, new TestPosition(element, this)).getElement();
+        TestObject result = list.set(index, new TestPosition(element, this)).getElement();
+        clearSort();
+        return result;
+    }
+
+    private void setSize(int size) {
+        try {
+            Field s = AbstractCollection.class.getDeclaredField("size");
+            s.setAccessible(true);
+            s.set(this, size);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearSort() {
+        try {
+            Method clear = AbstractSort.class.getDeclaredMethod("clear");
+            clear.invoke(getSort().get(this));
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Field getSort() {
+        Field sort;
+        try {
+            sort = AbstractList.class.getDeclaredField("sort");
+            sort.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        return sort;
     }
 
     @Override
     public Position<TestObject> positionOf(final TestObject element) {
         return list.get(indexOf(element));
+    }
+
+    private TestPosition validatePosition(Position<TestObject> position) {
+        try {
+            Method validate = AbstractList.class.getDeclaredMethod("validatePosition", Position.class);
+            validate.setAccessible(true);
+            validate.invoke(this, position);
+            return (TestPosition)position;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new AssertionError();
+        }
     }
 
     @Override
