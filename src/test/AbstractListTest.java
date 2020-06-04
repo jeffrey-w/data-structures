@@ -1,14 +1,11 @@
 package test;
 
-import main.AbstractList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,18 +55,10 @@ class AbstractListTest {
     void sort() {
         full.sort(TestObject.DESCENDING_ORDER);
         assertTrue(isSorted(full, TestObject.DESCENDING_ORDER));
-        try {
-            Method isSorted = AbstractList.class.getDeclaredMethod("isSorted");
-            isSorted.setAccessible(true);
-            assertTrue((Boolean)isSorted.invoke(full));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            fail();
-        }
     }
 
     @Test
-    void testEquals() {
+    void equalsObject() {
         assertNotEquals(full, null);
         assertNotEquals(full, new Object());
         assertNotEquals(full, empty);
@@ -78,7 +67,7 @@ class AbstractListTest {
     }
 
     @Test
-    void testHashCode() {
+    void hashCodeVoid() {
         assertNotEquals(full.hashCode(), empty.hashCode());
         assertEquals(full.hashCode(), copy(full).hashCode());
     }
@@ -98,7 +87,7 @@ class AbstractListTest {
     @Test
     @Order(2)
     void readObject() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(PATH + "AbstractList.datQ"))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(PATH + "AbstractList.dat"))) {
             TestList list = (TestList)in.readObject();
             assertEquals(PREV, list);
         } catch (IOException | ClassNotFoundException e) {
