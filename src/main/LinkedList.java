@@ -220,13 +220,13 @@ public class LinkedList<E> extends AbstractList<E> {
         int next;
         Node<E> current;
         boolean added;
-        boolean removable;
+        boolean modifiable;
 
         ListIter(int next, Node<E> current) {
             this.next = next;
             this.current = current.prev;
             added = false;
-            removable = false;
+            modifiable = false;
         }
 
         @Override
@@ -242,7 +242,7 @@ public class LinkedList<E> extends AbstractList<E> {
             next++;
             current = current.next;
             added = false;
-            removable = true;
+            modifiable = true;
             return current.getElement();
         }
 
@@ -259,7 +259,7 @@ public class LinkedList<E> extends AbstractList<E> {
             next--;
             current = current.prev;
             added = false;
-            removable = true;
+            modifiable = true;
             return current.next.getElement();
         }
 
@@ -275,17 +275,18 @@ public class LinkedList<E> extends AbstractList<E> {
 
         @Override
         public void remove() {
-            if (!removable || added) {
+            if (!modifiable || added) {
                 throw new IllegalStateException();
             }
-            removable = false;
+            next--;
+            modifiable = false;
             current = current.prev;
             unlink(current.next);
         }
 
         @Override
         public void set(final E e) {
-            if (!removable || added) {
+            if (!modifiable || added) {
                 throw new IllegalStateException();
             }
             setAt(current, e);
@@ -293,6 +294,9 @@ public class LinkedList<E> extends AbstractList<E> {
 
         @Override
         public void add(final E e) {
+            if(!modifiable) {
+                throw new IllegalStateException();
+            }
             next++;
             current = current.next;
             added = true;
