@@ -199,8 +199,7 @@ public class TestList extends AbstractList<TestObject> {
             validate.invoke(this, position);
             return (TestPosition)position;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            throw new AssertionError();
+            throw new RuntimeException(e);
         }
     }
 
