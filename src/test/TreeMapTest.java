@@ -35,9 +35,8 @@ class TreeMapTest {
             node.setAccessible(true);
             return (Entry<TestObject, TestObject>)node.get(map);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        throw new AssertionError();
     }
 
     @SuppressWarnings("unchecked")
@@ -49,7 +48,7 @@ class TreeMapTest {
                 childNode.setAccessible(true);
                 return (Entry<TestObject, TestObject>)childNode.get(entry);
             } catch (IllegalAccessException | NoSuchFieldException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         throw new AssertionError();
