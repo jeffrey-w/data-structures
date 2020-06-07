@@ -218,20 +218,18 @@ public class LinkedList<E> extends AbstractList<E> {
     private final class ListIter implements ListIterator<E> {
 
         int next;
-        Node<E> current;
+        Node<E> last, current;
         boolean added;
-        boolean modifiable;
 
         ListIter(int next, Node<E> current) {
             this.next = next;
-            this.current = current.prev;
+            this.current = current;
             added = false;
-            modifiable = false;
         }
 
         @Override
         public boolean hasNext() {
-            return current.next != tail;
+            return current != tail;
         }
 
         @Override
@@ -240,10 +238,10 @@ public class LinkedList<E> extends AbstractList<E> {
                 throw new NoSuchElementException();
             }
             next++;
+            last = current;
             current = current.next;
             added = false;
-            modifiable = true;
-            return current.getElement();
+            return last.getElement();
         }
 
         @Override
@@ -257,10 +255,10 @@ public class LinkedList<E> extends AbstractList<E> {
                 throw new NoSuchElementException();
             }
             next--;
+            last = current;
             current = current.prev;
             added = false;
-            modifiable = true;
-            return current.next.getElement();
+            return last.getElement();
         }
 
         @Override
@@ -275,32 +273,27 @@ public class LinkedList<E> extends AbstractList<E> {
 
         @Override
         public void remove() {
-            if (!modifiable || added) {
+            if (last == null || added) {
                 throw new IllegalStateException();
             }
             next--;
-            modifiable = false;
-            current = current.prev;
-            unlink(current.next);
+            unlink(last);
+            last = null;
         }
 
         @Override
         public void set(final E e) {
-            if (!modifiable || added) {
+            if (last == null || added) {
                 throw new IllegalStateException();
             }
-            setAt(current, e);
+            setAt(last, e);
         }
 
         @Override
         public void add(final E e) {
-            if(!modifiable) {
-                throw new IllegalStateException();
-            }
             next++;
-            current = current.next;
             added = true;
-            addBefore(current, e);
+            addAfter(last, e);
         }
 
     }
