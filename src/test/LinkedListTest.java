@@ -142,24 +142,30 @@ class LinkedListTest {
     @Test
     void listIterator() {
         int count = 0;
-        ListIterator<TestObject> iterator = full.listIterator();
-        while (iterator.hasNext()) {
-            iterator.next();
+        ListIterator<TestObject> one = full.listIterator(), two = full.listIterator();
+        one.next();
+        one.set(null);
+        assertNull(full.getFirst());
+        one.add(TestObject.random());
+        assertThrows(IllegalStateException.class, one::remove);
+        assertThrows(IllegalStateException.class, () -> one.set(null));
+        assertEquals(2, one.nextIndex());
+        while (two.hasNext()) {
+            two.next();
             count++;
         }
-        assertThrows(NoSuchElementException.class, iterator::next);
-        assertEquals(count, iterator.nextIndex());
+        assertThrows(NoSuchElementException.class, two::next);
+        assertEquals(count, two.nextIndex());
         assertEquals(count, full.size());
-        while (iterator.hasPrevious()) {
-            iterator.previous();
-            iterator.remove();
+        while (two.hasPrevious()) {
+            two.previous();
+            two.remove();
             count--;
         }
-        assertThrows(NoSuchElementException.class, iterator::previous);
-        assertThrows(IllegalStateException.class, () -> iterator.add(null));
-        assertThrows(IllegalStateException.class, () -> iterator.set(null));
-        assertThrows(IllegalStateException.class, iterator::remove);
-        assertEquals(-1, iterator.previousIndex());
+        assertThrows(NoSuchElementException.class, two::previous);
+        assertThrows(IllegalStateException.class, () -> two.set(null));
+        assertThrows(IllegalStateException.class, two::remove);
+        assertEquals(-1, two.previousIndex());
         assertEquals(count, full.size());
     }
 
