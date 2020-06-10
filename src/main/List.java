@@ -203,9 +203,8 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      *
      * @param index the specified index
      * @return a {@code ListIterator} over the elements in this {@code List} beginning at the specified {@code index}
-     * @throws IllegalStateException if this {@code List} is empty
-     * @throws IndexOutOfBoundsException if the specified {@code index} is negative or greater than or equal to the
-     * size of this {@code List}
+     * @throws IndexOutOfBoundsException if the specified {@code index} is negative or greater than the size of this
+     * {@code List}
      */
     ListIterator<E> listIterator(final int index);
 
