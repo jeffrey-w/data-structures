@@ -195,7 +195,12 @@ public class LinkedList<E> extends AbstractList<E> {
 
     @Override
     public ListIterator<E> listIterator(final int index) {
-        return new ListIter(index, toNode(index, true).next);
+        validateIndex(index, true);
+        Node<E> node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        return new ListIter(index, node.next);
     }
 
     @Override
