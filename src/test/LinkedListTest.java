@@ -4,6 +4,7 @@ import main.LinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
@@ -147,6 +148,8 @@ class LinkedListTest {
         one.set(null);
         assertNull(full.getFirst());
         one.add(TestObject.random());
+        assertThrows(IndexOutOfBoundsException.class, () -> full.listIterator(full.size() + 1));
+        assertThrows(IllegalArgumentException.class, () -> full.listIterator(empty.addFirst(null)));
         assertThrows(IllegalStateException.class, one::remove);
         assertThrows(IllegalStateException.class, () -> one.set(null));
         assertEquals(2, one.nextIndex());
@@ -170,15 +173,15 @@ class LinkedListTest {
     }
 
     @Test
-    void listIteratorInt() {
-    }
-
-    @Test
-    void listIteratorPosition() {
-    }
-
-    @Test
     void iterator() {
+        Iterator<TestObject> iterator = full.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertTrue(full.isEmpty());
+        assertThrows(NoSuchElementException.class, iterator::next);
+        assertThrows(IllegalStateException.class, iterator::remove);
     }
 
 }
