@@ -178,9 +178,20 @@ public interface List<E> extends Collection<E>, Sortable<E> {
      *
      * @param element the specified element
      * @return the index of the specified {@code element}
+     * @throws IllegalStateException if this {@code List} is empty
      * @throws NoSuchElementException if the specified {@code element} is not in this {@code List}
      */
     int indexOf(final E element);
+
+    /**
+     * Provides the last index at which the specified {@code element} is found in this {@code List}.
+     *
+     * @param element the specified element
+     * @return the last index of the specified {@code element}
+     * @throws IllegalStateException if this {@code List} is empty
+     * @throws NoSuchElementException if the specified {@code element} is not in this {@code List}
+     */
+    int lastIndexOf(final E element);
 
     /**
      * Provides the {@code Position} of the specified {@code element} in this {@code List}.

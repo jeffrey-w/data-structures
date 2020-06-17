@@ -52,6 +52,16 @@ class AbstractListTest {
     }
 
     @Test
+    void lastIndexOf() {
+        int index = RAND.nextInt(SIZE);
+        TestObject object = new TestObject(index);
+        full.add(index, object);
+        assertThrows(IllegalStateException.class, () -> empty.lastIndexOf(null));
+        assertThrows(NoSuchElementException.class, () -> full.lastIndexOf(new TestObject(SIZE)));
+        assertEquals(index + 1, full.lastIndexOf(object));
+    }
+
+    @Test
     void sort() {
         full.sort(TestObject.DESCENDING_ORDER);
         assertTrue(isSorted(full, TestObject.DESCENDING_ORDER));
