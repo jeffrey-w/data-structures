@@ -5,10 +5,7 @@ import util.AbstractSort;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 import static util.Common.*;
 
@@ -63,11 +60,27 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     }
 
     @Override
+    public int lastIndexOf(final E element) {
+        if (isEmpty()) {
+            throw new IllegalStateException();
+        }
+        int index = size - 1;
+        ListIterator<E> i = listIterator(size);
+        while (i.hasPrevious()) {
+            if (areEqual(element, i.previous())) {
+                return index;
+            }
+            index--;
+        }
+        throw new NoSuchElementException();
+    }
+
+    @Override
     public void sort(final Comparator<E> comp) {
         E[] elements = toArray();
         sort.sort(elements, comp);
         clear();
-        for(E element : elements) {
+        for (E element : elements) {
             addLast(element);
         }
     }
@@ -133,7 +146,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         if (isEmpty()) {
             throw new IllegalStateException();
         }
-        if(position == null) {
+        if (position == null) {
             throw new NullPointerException();
         }
         if (!(position instanceof AbstractPosition) || ((AbstractPosition<E>)position).owner != this) {
