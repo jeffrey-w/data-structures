@@ -280,7 +280,7 @@ public class LinkedList<E> extends AbstractList<E> {
 
         @Override
         public void remove() {
-            if (!removable|| added) {
+            if (!removable || added) {
                 throw new IllegalStateException();
             }
             removable = false;
