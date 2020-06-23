@@ -18,11 +18,6 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
     AbstractMap<E, Void> map;
 
     @Override
-    public void clear() {
-        init();
-    }
-
-    @Override
     protected void init() {
         map.init();
     }
