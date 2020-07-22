@@ -60,7 +60,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public V put(final K key, final V value) {
+    public V put(final K key, final V value) { // TODO this is incorrect (duplicates added to list twice)
         list.addLast(key);
         size = list.size;
         return map.put(key, value);
