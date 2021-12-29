@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static util.Common.areEqual;
 import static util.Common.validateObject;
@@ -60,23 +61,28 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     }
 
     @Override
-    public V put(final K key, final V value) { // TODO this is incorrect (duplicates added to list twice)
-        list.addLast(key);
-        size = list.size;
-        return map.put(key, value);
+    public Optional<V> put(final K key, final V value) {
+        Optional<V> result = map.put(key, value);
+        if (result.isEmpty()) {
+            list.addLast(key);
+            size = list.size;
+        }
+        return result;
     }
 
     @Override
     public V remove(final K key) {
+        V result = map.remove(key);
         list.remove(list.indexOf(key));
         size = list.size;
-        return map.remove(key);
+        return result;
     }
 
     @Override
     public Entry<K, V> removeFirst() {
         K key = list.removeFirst();
         V value = map.remove(key);
+        size = list.size;
         return new LinkedHashMapEntry<>(key, value);
     }
 
@@ -84,6 +90,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     public Entry<K, V> removeLast() {
         K key = list.removeLast();
         V value = map.remove(key);
+        size = list.size;
         return new LinkedHashMapEntry<>(key, value);
     }
 
@@ -91,6 +98,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     public Entry<K, V> removePrevious(final K key) {
         K prev = list.removePrevious(list.positionOf(key));
         V value = map.remove(prev);
+        size = list.size;
         return new LinkedHashMapEntry<>(prev, value);
     }
 
@@ -98,6 +106,7 @@ public class OrderedHashMap<K, V> extends AbstractMap<K, V> implements OrderedMa
     public Entry<K, V> removeNext(final K key) {
         K next = list.removeNext(list.positionOf(key));
         V value = map.remove(next);
+        size = list.size;
         return new LinkedHashMapEntry<>(next, value);
     }
 

@@ -1,6 +1,7 @@
 package main;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * The {@code Map} interface specifies operations on a collection of key-value pairs.
@@ -45,9 +46,10 @@ public interface Map<K, V> {
      *
      * @param key the specified key
      * @param value the specified value
-     * @return the value previously associated with the specified {@code key} or {@code null} if none existed
+     * @return an {@code Optional} containing the value previously associated with the specified {@code key} if such
+     * a value exists
      */
-    V put(final K key, final V value);
+    Optional<V> put(final K key, final V value);
 
     /**
      * Adds an entry to this {@code Map} associating the specified {@code key} to the specified {@code value} only if
@@ -97,10 +99,10 @@ public interface Map<K, V> {
      *
      * @param key the specified key
      * @param value the specified value
-     * @return the value associated with the specified {@code key}, or {@code null} if no entry in this {@code Map}
-     * associates the specified {@code key} with a value
+     * @return an {@code Optional} containing the value previously associated with the specified {@code key} if such
+     * a value exists
      */
-    V replace(final K key, final V value);
+    Optional<V> replace(final K key, final V value);
 
     /**
      * Provides an {@code Iterable} collection of the keys in this {@code Map}.

@@ -2,6 +2,7 @@ package main;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static util.Common.areEqual;
 
@@ -55,11 +56,11 @@ public abstract class AbstractMap<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
-    public V replace(final K key, final V value) {
+    public Optional<V> replace(final K key, final V value) {
         if (contains(key)) {
             return put(key, value);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

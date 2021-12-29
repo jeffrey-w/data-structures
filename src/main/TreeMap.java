@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 import static util.Common.*;
 
@@ -92,7 +93,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
     }
 
     @Override
-    public V put(final K key, final V value) {
+    public Optional<V> put(final K key, final V value) {
         Node<K, V> z = new Node<>(key, value);
         Node<K, V> y = nil, x = root;
         K cmp;
@@ -100,7 +101,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
             y = x;
             cmp = x.getKey();
             if (areEqual(key, cmp)) {
-                return y.setValue(value);
+                return Optional.of(y.setValue(value));
             }
             if (lessThan(key, cmp)) {
                 x = x.left;
@@ -124,7 +125,7 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         z.color = RED;
         insertFixup(z);
         size++;
-        return null;
+        return Optional.empty();
     }
 
     private void insertFixup(Node<K, V> z) {
@@ -169,32 +170,27 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
     @Override
     public V remove(final K key) {
-        ensureNonEmpty();
-        return delete(search(root, key)).getValue();
+        return delete(search(getRootOrThrow(), key)).getValue();
     }
 
     @Override
     public Entry<K, V> removeFirst() {
-        ensureNonEmpty();
-        return delete(minimum(root));
+        return delete(minimum(getRootOrThrow()));
     }
 
     @Override
     public Entry<K, V> removeLast() {
-        ensureNonEmpty();
-        return delete(maximum(root));
+        return delete(maximum(getRootOrThrow()));
     }
 
     @Override
     public Entry<K, V> removePrevious(final K key) {
-        ensureNonEmpty();
-        return delete(predecessor(search(root, key)));
+        return delete(predecessor(search(getRootOrThrow(), key)));
     }
 
     @Override
     public Entry<K, V> removeNext(final K key) {
-        ensureNonEmpty();
-        return delete(successor(search(root, key)));
+        return delete(successor(search(getRootOrThrow(), key)));
     }
 
     Node<K, V> delete(Node<K, V> z) {
@@ -334,32 +330,27 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
 
     @Override
     public V get(final K key) {
-        ensureNonEmpty();
-        return search(root, key).getValue();
+        return search(getRootOrThrow(), key).getValue();
     }
 
     @Override
     public Entry<K, V> getFirst() {
-        ensureNonEmpty();
-        return minimum(root);
+        return minimum(getRootOrThrow());
     }
 
     @Override
     public Entry<K, V> getLast() {
-        ensureNonEmpty();
-        return maximum(root);
+        return maximum(getRootOrThrow());
     }
 
     @Override
     public Entry<K, V> getPrevious(final K key) {
-        ensureNonEmpty();
-        return predecessor(search(root, key));
+        return predecessor(search(getRootOrThrow(), key));
     }
 
     @Override
     public Entry<K, V> getNext(final K key) {
-        ensureNonEmpty();
-        return successor(search(root, key));
+        return successor(search(getRootOrThrow(), key));
     }
 
     private Node<K, V> search(Node<K, V> root, K key) {
@@ -421,10 +412,11 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements OrderedMap<K, V>
         return y;
     }
 
-    private void ensureNonEmpty() { // TODO achieve this more elegantly
+    private Node<K, V> getRootOrThrow() {
         if (isEmpty()) {
             throw new IllegalStateException();
         }
+        return root;
     }
 
     private transient Set<Entry<K, V>> entries;
